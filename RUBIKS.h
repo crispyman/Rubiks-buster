@@ -11,7 +11,9 @@
   enum Side {TOP, LEFT, FRONT, RIGHT, BACK, BOTTOM};
   typedef Side side_t;
 
-  color_t Cube[48];
+  typedef color_t[48] cube_t;
+
+  cube_t Cube;
 
   // Prototypes
 
