@@ -21,9 +21,12 @@ int main(int argc, char * argv[]){
 //  cc      - whether the rotation is counter clockwise or not.
 void rotate(cube_t* cube, side_t side, int cc) {
   // Rotate the face of the side chosen.
-  rotateFace((color_t*)(cube + side * 8), cc);
+  rotateFace((color_t*)(cube + (side * 8)), cc);
 
-  // Rotate the edges of the faces .
+  // Rotate the edges of the faces.
+  switch (side) {
+    
+  }
 }
 
 void rotateFace(color_t* face, int cc) {
