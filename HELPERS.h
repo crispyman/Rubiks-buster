@@ -10,7 +10,6 @@
 
   // Prototypes
   void rotate(cube_t* cube, side_t side, int cc);
-  void rotateFace(color_t* face, int cc);
-  void rotate_sub_cube(color_t* sub_cube);
+  void rotate_sub_cube(color_t* sub_cube, rotate_t* rotation);
 
 #endif //RUBIKS_BUSTER_HELPERS_H
