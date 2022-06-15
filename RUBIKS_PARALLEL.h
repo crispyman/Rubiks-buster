@@ -1,0 +1,8 @@
+//
+// Created by andrewiii on 6/15/22.
+//
+
+#ifndef RUBIKS_BUSTER_RUBIKS_PARALLEL_H
+#define RUBIKS_BUSTER_RUBIKS_PARALLEL_H
+
+#endif //RUBIKS_BUSTER_RUBIKS_PARALLEL_H
