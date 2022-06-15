@@ -5,15 +5,9 @@
 #ifndef RUBIKS_BUSTER_RUBIKS_H
 #define RUBIKS_BUSTER_RUBIKS_H
 
-  enum Color {WHITE, GREEN, RED, BLUE, ORANGE, YELLOW};
-  typedef Color color_t;
-
-  enum Side {TOP, LEFT, FRONT, RIGHT, BACK, BOTTOM};
-  typedef Side side_t;
-
+  typedef enum {WHITE, GREEN, RED, BLUE, ORANGE, YELLOW} color_t;
+  typedef enum {TOP, LEFT, FRONT, RIGHT, BACK, BOTTOM} side_t;
   typedef color_t[48] cube_t;
-
-  cube_t Cube;
 
   // Prototypes
 
