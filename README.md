@@ -10,6 +10,6 @@ Total | 2:00 |
 ## Andrew's Time
 
 Date | Hours | Notes
---- | --- | --- 
-06-15 | XX:XX | foobar
-Total | XX:XX |
+--- |-------| --- 
+06-15 | 3:00  | Working on initialization and rotation methods 
+Total | 3:00  |
