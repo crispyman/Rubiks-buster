@@ -10,3 +10,11 @@
 #include "mpi.h"
 #include "HELPERS.h"
 #include "RUBIKS_SEQENTIAL.h"
+
+void seqentialSolver(cube_t* cube) {
+
+
+
+
+}
+

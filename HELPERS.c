@@ -1,4 +1,6 @@
 #include <string.h>
+#include <stdbool.h>
+#include <assert.h>
 #include "HELPERS.h"
 
  void rotate(cube_t* cube, rotate_action_t act) {
@@ -23,6 +25,34 @@
     for (int j = 0; j < N; j++)
       rotate_sub_cube(*plane[i][j], r);
 }
+void verifyValid(cube_t* cube) {
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            for (int k = 0; k < N; k++) {
+                if (i == 0)
+                    assert((*cube)[i][j][k][TOP] != NONE);
+                else
+                    assert((*cube)[i][j][k][TOP] == NONE);
+                if (j == 0)
+                    assert((*cube)[i][j][k][LEFT] != NONE);
+                else
+                    assert((*cube)[i][j][k][LEFT] == NONE);
+                if (k == 0)
+                    assert((*cube)[i][j][k][FRONT] != NONE);
+                else
+                    assert((*cube)[i][j][k][FRONT] == NONE);
+                if (j == N - 1)
+                    assert((*cube)[i][j][k][RIGHT] != NONE);
+                else
+                    assert((*cube)[i][j][k][RIGHT] == NONE);
+                if (k == N - 1)
+                    assert((*cube)[i][j][k][BACK] != NONE);
+                else
+                    assert((*cube)[i][j][k][BACK] == NONE);
+                if (i == N - 1)
+                    assert((*cube)[i][j][k][BOTTOM] != NONE);
+                else
+                    assert((*cube)[i][j][k][BOTTOM] == NONE);
 
 // Given a single subcube's coordinates and a set of two axes, load the
 // addresses of all the coplanar subcubes into the array plane.
@@ -37,12 +67,65 @@ void load_plane(cube_t* cube, rotate_action_t act, sub_cube_t* plane[N][N]) {
       }
     }
   }
+            }
+        }
+    }
 }
 
+bool checkSolved(cube_t* cube) {
+    int front_color = NONE;
+    int back_color = NONE;
+    int left_color = NONE;
+    int right_color = NONE;
+    int top_color = NONE;
+    int bottom_color = NONE;
 // Given a populated plane, rotate it 90% either clockwise or counter clockwise.
 void rotate_plane(sub_cube_t* plane[N][N], int cc) {
   sub_cube_t new_plane[N][N];
 
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            for (int k = 0; k < N; k++) {
+                if (i == 0) {
+                    if (top_color == NONE)
+                        top_color = (*cube)[i][j][k][TOP];
+                    else if (top_color != (*cube)[i][j][k][TOP])
+                        return false;
+                }
+                if (j == 0) {
+                    if (left_color == NONE)
+                        left_color = (*cube)[i][j][k][LEFT];
+                    else if (left_color != (*cube)[i][j][k][LEFT])
+                        return false;
+                }
+                if (k == 0){
+                    if (front_color == NONE)
+                        front_color = (*cube)[i][j][k][FRONT];
+                    else if (front_color != (*cube)[i][j][k][FRONT])
+                        return false;
+                }
+                if (j == N - 1){
+                    if (right_color == NONE)
+                        right_color = (*cube)[i][j][k][RIGHT];
+                    else if (right_color != (*cube)[i][j][k][RIGHT])
+                        return false;
+                }
+                if (k == N - 1){
+                    if (back_color == NONE)
+                        back_color = (*cube)[i][j][k][BACK];
+                    else if (back_color != (*cube)[i][j][k][BACK])
+                        return false;
+                }
+                if (i == N - 1){
+                    if (bottom_color == NONE)
+                        bottom_color = (*cube)[i][j][k][BOTTOM];
+                    else if (bottom_color != (*cube)[i][j][k][BOTTOM])
+                        return false;
+                }
+            }
+        }
+    }
+    return true;
   for (int x_i; x_i < N; x_i++)
     for (int y_i; y_i < N; y_i++)
       memcpy(new_plane[x_i][y_i], cc ? *plane[y_i][N - x_i] : *plane[N - y_i][x_i], sizeof(sub_cube_t));

@@ -1,7 +1,6 @@
-#include <stdbool.h>
-
 #ifndef RUBIKS_BUSTER_HELPERS_H
 #define RUBIKS_BUSTER_HELPERS_H
+  #include <stdbool.h>
   #define N 3
 
   typedef enum {NONE, WHITE, GREEN, RED, BLUE, ORANGE, YELLOW} color_t;

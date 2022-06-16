@@ -7,7 +7,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 #include <time.h>
 #include "mpi.h"
 #include "RUBIKS.h"
@@ -25,8 +24,8 @@ int main(int argc, char * argv[]) {
 
 
     free(my_cube);
-
 }
+
 void initialize(cube_t* cube){
     for (int i = 0; i < N; i++){
         for (int j = 0; j < N; j++) {
@@ -65,49 +64,15 @@ void scramble(cube_t* cube) {
     srand(time(0));
     for (unsigned int i = 0; i < -1; i++) {
         int temp_rand = rand();
-
-        rotate_action_t act = {
+        rotate_action_t action = {
             .x = (temp_rand & 0x1) ? 0 : N - 1,
             .y = (temp_rand & 0x2) ? 0 : N - 1,
             .z = (temp_rand & 0x4) ? 0 : N - 1,
-            .a = rand() % 3,
-            .cc = rand() % 2
+            .a = temp_rand & 0x18,
+            .cc = temp_rand & 0x20,
         };
 
-        rotate(cube, act);
+        rotate(cube, action);
     }
 }
 
-void verifyValid(cube_t* cube) {
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            for (int k = 0; k < N; k++) {
-                if (i == 0)
-                    assert((*cube)[i][j][k][TOP] != NONE);
-                else
-                    assert((*cube)[i][j][k][TOP] == NONE);
-                if (j == 0)
-                    assert((*cube)[i][j][k][LEFT] != NONE);
-                else
-                    assert((*cube)[i][j][k][LEFT] == NONE);
-                if (k == 0)
-                    assert((*cube)[i][j][k][FRONT] != NONE);
-                else
-                    assert((*cube)[i][j][k][FRONT] == NONE);
-                if (j == N - 1)
-                    assert((*cube)[i][j][k][RIGHT] != NONE);
-                else
-                    assert((*cube)[i][j][k][RIGHT] == NONE);
-                if (k == N - 1)
-                    assert((*cube)[i][j][k][BACK] != NONE);
-                else
-                    assert((*cube)[i][j][k][BACK] == NONE);
-                if (i == N - 1)
-                    assert((*cube)[i][j][k][BOTTOM] != NONE);
-                else
-                    assert((*cube)[i][j][k][BOTTOM] == NONE);
-
-            }
-        }
-    }
-}
