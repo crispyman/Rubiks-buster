@@ -1,6 +1,6 @@
 #include "HELPERS.h"
 
-void rotate(cube_t* cube, coord_t coord, axes_t a, int cc) {
+void rotate(cube_t* cube, int x, int y, int z, axes_t a, int cc) {
   sub_cube_t* plane[N][N];
 
   // Load the requested plane.

@@ -9,15 +9,9 @@
   typedef color_t sub_cube_t[6];
   typedef sub_cube_t cube_t[N][N][N];
 
-  typedef struct {
-    uint x;
-    uint y;
-    uint z;
-  } coord_t;
-
   // Prototypes
-  void rotate(cube_t* cube, side_t side, int cc);
+  void rotate(cube_t* cube, int x, int y, int z, axes_t a, int cc);
   void rotate_sub_cube(color_t* sub_cube, rotate_t* rotation);
-  void load_plane(cube_t* cube, int x, int y, int z, axis_t axis, sub_cube_t* plane[N][N]);
+  void load_plane(cube_t* cube, int x, int y, int z, axes_t axis, sub_cube_t* plane[N][N]);
 
 #endif //RUBIKS_BUSTER_HELPERS_H
