@@ -60,13 +60,16 @@ void initialize(cube_t* cube){
     }
 }
 
-void scramble(cube_t* cube){
+void scramble(cube_t* cube) {
 
     srand(time(0));
-    for (unsigned int i = 0; i < -1; i++)
-        rotate(cube, rand() % 6, rand() % 5);
-
-
+    for (unsigned int i = 0; i < -1; i++) {
+        int temp_rand = rand();
+        int x = (temp_rand & 0x1) ? 0 : N - 1;
+        int y = (temp_rand & 0x2) ? 0 : N - 1;
+        int z = (temp_rand & 0x4) ? 0 : N - 1;
+        rotate(cube, x, y, z, rand() % 3, rand() % 2);
+    }
 }
 
 void verifyValid(cube_t* cube) {
