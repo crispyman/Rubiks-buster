@@ -1,36 +1,39 @@
+#include <string.h>
 #include "HELPERS.h"
 
 void rotate(cube_t* cube, int x, int y, int z, axes_t a, int cc) {
+  // Create a 2D array of sub cube pointers.
   sub_cube_t* plane[N][N];
 
   // Load the requested plane.
-  load_plane(cube, coord.x, coord.y, coord.z, a, plane);
+  load_plane(cube, x, y, z, a, plane);
 
-  // Rotate position of the subcubes within the plane.
+  // Rotate position of the sub cubes within the plane.
   rotate_plane(plane, cc);
 
   // Determine which direction the sub cubes need to rotate.
   rotate_t r;
   if (a == XY) r = cc ? R_LEFT : R_RIGHT;
-  if (a == YZ) r = cc ? R_RIGHT : R_LEFT;
-  if (a == YZ) r = cc ? R_DOWN : R_UP;
+  else if (a == YZ) r = cc ? R_RIGHT : R_LEFT;
+  else if (a == YZ) r = cc ? R_DOWN : R_UP;
+  else return;
 
   // Rotate the faces of each affected sub cube.
   for (int i = 0; i < N; i++)
     for (int j = 0; j < N; j++)
-      rotate_sub_cube(plane[i][j], r);
+      rotate_sub_cube(*plane[i][j], r);
 }
 
 // Given a single subcube's coordinates and a set of two axes, load the
 // addresses of all the coplanar subcubes into the array plane.
 void load_plane(cube_t* cube, int x, int y, int z, axes_t a, sub_cube_t* plane[N][N]) {
-  for (int y_i = 0; y_i < N; y_i++) {
-    for (int x_i = 0; x_i < N; x_i++) {
+  for (int x_i = 0; x_i < N; x_i++) {
+    for (int y_i = 0; y_i < N; y_i++) {
       for (int z_i = 0; z_i < N; z_i++) {
-        int y_val = a == XZ ? y : y_i;
         int x_val = a == YZ ? x : x_i;
+        int y_val = a == XZ ? y : y_i;
         int z_val = a == XY ? z : z_i;
-        plane[y][x] = &cube[y_val][x_val][z_val];
+        plane[x_i][y_i] = cube[x_val][y_val][z_val];
       }
     }
   }
@@ -38,17 +41,19 @@ void load_plane(cube_t* cube, int x, int y, int z, axes_t a, sub_cube_t* plane[N
 
 // Given a populated plane, rotate it 90% either clockwise or counter clockwise.
 void rotate_plane(sub_cube_t* plane[N][N], int cc) {
-  sub_cube_t* new_plane[N][N];
+  sub_cube_t new_plane[N][N];
 
-  for (int y_i; y_i < N; y_i++)
-    for (int x_i; x_i < N; x_i++)
-      new_plane[y_i][x_i] = cc ? plane[N - x][y] : plane[x][N - y];
+  for (int x_i; x_i < N; x_i++)
+    for (int y_i; y_i < N; y_i++)
+      memcpy(new_plane[x_i][y_i], cc ? *plane[y_i][N - x_i] : *plane[N - y_i][x_i], sizeof(sub_cube_t));
 
-  memcpy(plane, new_plane, sizeof(sub_cube_t) * N * N);
+  for (int x_i; x_i < N; x_i++)
+    for (int y_i; y_i < N; y_i++)
+      memcpy(*plane[x_i][y_i], new_plane[x_i][y_i], sizeof(sub_cube_t));
 }
 
 // Rotate a sub cube.
-void rotate_sub_cube(color_t* sub_cube, rotate_t rotation) {
+void rotate_sub_cube(sub_cube_t sub_cube, rotate_t rotation) {
 
   color_t front_color = sub_cube[FRONT];;
 
