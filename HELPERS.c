@@ -8,7 +8,7 @@ void rotate(cube_t* cube, side_t side, int cc) {
 }
 
 // Rotate a sub cube.
-void rotate_sub_cube(color_t* sub_cube, rotate_t* rotation) {
+void rotate_sub_cube(color_t* sub_cube, rotate_t rotation) {
 
   color_t front_color = sub_cube[FRONT];;
 
@@ -17,7 +17,7 @@ void rotate_sub_cube(color_t* sub_cube, rotate_t* rotation) {
       sub_cube[FRONT] = sub_cube[BOTTOM];
       sub_cube[BOTTOM] = sub_cube[BACK];
       sub_cube[BACK] = sub_cube[TOP];
-      sub_cube[TOP] = front_color
+      sub_cube[TOP] = front_color;
       break;
     }
     case R_DOWN: {
