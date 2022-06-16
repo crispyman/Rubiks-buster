@@ -1,21 +1,21 @@
 #include <string.h>
 #include "HELPERS.h"
 
-void rotate(cube_t* cube, int x, int y, int z, axes_t a, int cc) {
+ void rotate(cube_t* cube, rotate_action_t act) {
   // Create a 2D array of sub cube pointers.
   sub_cube_t* plane[N][N];
 
   // Load the requested plane.
-  load_plane(cube, x, y, z, a, plane);
+  load_plane(cube, act, plane);
 
   // Rotate position of the sub cubes within the plane.
-  rotate_plane(plane, cc);
+  rotate_plane(plane, act.cc);
 
   // Determine which direction the sub cubes need to rotate.
   rotate_t r;
-  if (a == XY) r = cc ? R_LEFT : R_RIGHT;
-  else if (a == YZ) r = cc ? R_RIGHT : R_LEFT;
-  else if (a == YZ) r = cc ? R_DOWN : R_UP;
+  if (act.a == XY) r = act.cc ? R_LEFT : R_RIGHT;
+  else if (act.a == YZ) r = act.cc ? R_RIGHT : R_LEFT;
+  else if (act.a == YZ) r = act.cc ? R_DOWN : R_UP;
   else return;
 
   // Rotate the faces of each affected sub cube.
@@ -26,13 +26,13 @@ void rotate(cube_t* cube, int x, int y, int z, axes_t a, int cc) {
 
 // Given a single subcube's coordinates and a set of two axes, load the
 // addresses of all the coplanar subcubes into the array plane.
-void load_plane(cube_t* cube, int x, int y, int z, axes_t a, sub_cube_t* plane[N][N]) {
+void load_plane(cube_t* cube, rotate_action_t act, sub_cube_t* plane[N][N]) {
   for (int x_i = 0; x_i < N; x_i++) {
     for (int y_i = 0; y_i < N; y_i++) {
       for (int z_i = 0; z_i < N; z_i++) {
-        int x_val = a == YZ ? x : x_i;
-        int y_val = a == XZ ? y : y_i;
-        int z_val = a == XY ? z : z_i;
+        int x_val = act.a == YZ ? act.x : x_i;
+        int y_val = act.a == XZ ? act.y : y_i;
+        int z_val = act.a == XY ? act.z : z_i;
         plane[x_i][y_i] = cube[x_val][y_val][z_val];
       }
     }
