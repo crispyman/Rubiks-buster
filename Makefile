@@ -5,6 +5,9 @@ MPICCFLAGS = -std=gnu11 -O2 -g -c -Wall -Wno-unused-variable -Wno-unused
 
 all: RUBIKS
 
+test:
+	./RUBIKS
+
 RUBIKS: RUBIKS.o RUBIKS_SEQENTIAL.o RUBIKS_PARALLEL.o HELPERS.o
 	$(MPICC) RUBIKS.o RUBIKS_SEQENTIAL.o RUBIKS_PARALLEL.o HELPERS.o -o RUBIKS
 

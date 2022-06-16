@@ -9,11 +9,11 @@
 
 ## Andrew's Time
 
-| Date  | Hours | Notes                                                           |
-|-------|-------|-----------------------------------------------------------------|
-| 06-15 | 3:00  | Working on initialization and rotation methods created makefile |
-| 06-16 | 1:00  | Wrote randomization function, refactored a helper function      |
-| Total | 3:00  |                                                                 |
+| Date  | Hours | Notes                                                                                     |
+|-------|-------|-------------------------------------------------------------------------------------------|
+| 06-15 | 3:00  | Working on initialization and rotation methods created makefile                           |
+| 06-16 | 3:00  | Wrote function to check if cube is solved, refactored code to use stuct to track movement |
+| Total | 3:00  |                                                                                           |
 
 
 Edit this README file so that it contains the following:
