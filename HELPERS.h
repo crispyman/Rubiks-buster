@@ -8,9 +8,18 @@
   typedef enum {XY, XZ, YZ} axes_t;
   typedef color_t sub_cube_t[6];
   typedef sub_cube_t cube_t[N][N][N];
+  typedef struct rotate_action_t {
+          int x;
+          int y;
+          int z;
+          axes_t a;
+          int cc;
+  } rotate_action_t;
 
   // Prototypes
-  void rotate(cube_t* cube, int x, int y, int z, axes_t a, int cc);
+  void verifyValid(cube_t* cube);
+  bool checkSolved(cube_t* cube);
+  void rotate(cube_t* cube, rotate_action_t);
   void rotate_sub_cube(color_t* sub_cube, rotate_t* rotation);
   void load_plane(cube_t* cube, int x, int y, int z, axes_t axis, sub_cube_t* plane[N][N]);
 
