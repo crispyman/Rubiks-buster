@@ -54,19 +54,20 @@ void verifyValid(cube_t* cube) {
                 else
                     assert((*cube)[i][j][k][BOTTOM] == NONE);
 
+            }
+        }
+    }
+}
 // Given a single subcube's coordinates and a set of two axes, load the
 // addresses of all the coplanar subcubes into the array plane.
 void load_plane(cube_t* cube, rotate_action_t act, sub_cube_t* plane[N][N]) {
-  for (int x_i = 0; x_i < N; x_i++) {
-    for (int y_i = 0; y_i < N; y_i++) {
-      for (int z_i = 0; z_i < N; z_i++) {
-        int x_val = act.a == YZ ? act.x : x_i;
-        int y_val = act.a == XZ ? act.y : y_i;
-        int z_val = act.a == XY ? act.z : z_i;
-        plane[x_i][y_i] = cube[x_val][y_val][z_val];
-      }
-    }
-  }
+    for (int x_i = 0; x_i < N; x_i++) {
+        for (int y_i = 0; y_i < N; y_i++) {
+            for (int z_i = 0; z_i < N; z_i++) {
+                int x_val = act.a == YZ ? act.x : x_i;
+                int y_val = act.a == XZ ? act.y : y_i;
+                int z_val = act.a == XY ? act.z : z_i;
+                plane[x_i][y_i] = cube[x_val][y_val][z_val];
             }
         }
     }
@@ -79,10 +80,6 @@ bool checkSolved(cube_t* cube) {
     int right_color = NONE;
     int top_color = NONE;
     int bottom_color = NONE;
-// Given a populated plane, rotate it 90% either clockwise or counter clockwise.
-void rotate_plane(sub_cube_t* plane[N][N], int cc) {
-  sub_cube_t new_plane[N][N];
-
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             for (int k = 0; k < N; k++) {
@@ -126,6 +123,11 @@ void rotate_plane(sub_cube_t* plane[N][N], int cc) {
         }
     }
     return true;
+}
+// Given a populated plane, rotate it 90% either clockwise or counter clockwise.
+void rotate_plane(sub_cube_t* plane[N][N], int cc) {
+  sub_cube_t new_plane[N][N];
+
   for (int x_i; x_i < N; x_i++)
     for (int y_i; y_i < N; y_i++)
       memcpy(new_plane[x_i][y_i], cc ? *plane[y_i][N - x_i] : *plane[N - y_i][x_i], sizeof(sub_cube_t));
