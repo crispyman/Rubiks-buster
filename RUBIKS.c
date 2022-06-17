@@ -18,6 +18,7 @@ void scramble(cube_t* cube);
 
 
 int main(int argc, char * argv[]) {
+    srand(time(0));
     cube_t *my_cube = malloc(N * N * N * 6 * sizeof(int));
     initialize(my_cube);
 
@@ -64,15 +65,14 @@ void initialize(cube_t* cube){
 
 void scramble(cube_t* cube) {
 
-    srand(time(0));
     for (unsigned int i = 0; i < 2; i++) {
         int temp_rand = rand();
         rotate_action_t action = {
-            .x = (temp_rand & 0x1) ? 0 : N - 1,
-            .y = (temp_rand & 0x2) ? 0 : N - 1,
-            .z = (temp_rand & 0x4) ? 0 : N - 1,
-            .a = temp_rand & 0x18,
-            .cc = temp_rand & 0x20,
+            .x = rand() % N,
+            .y = rand() % N,
+            .z = rand() % N,
+            .a = rand() % 6,
+            .cc = rand() % 2,
         };
 
         rotate(cube, action);

@@ -1,5 +1,7 @@
 #include <string.h>
 #include <stdbool.h>
+#include <unistd.h>
+#include <stdlib.h>
 #include <assert.h>
 #include "HELPERS.h"
 
@@ -17,7 +19,7 @@
   rotate_t r;
   if (act.a == XY) r = act.cc ? R_LEFT : R_RIGHT;
   else if (act.a == YZ) r = act.cc ? R_RIGHT : R_LEFT;
-  else if (act.a == YZ) r = act.cc ? R_DOWN : R_UP;
+  else if (act.a == XZ) r = act.cc ? R_DOWN : R_UP;
   else return;
 
   // Rotate the faces of each affected sub cube.

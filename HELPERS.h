@@ -2,6 +2,7 @@
 #define RUBIKS_BUSTER_HELPERS_H
   #include <stdbool.h>
   #define N 3
+  #define DEBUG 1
 
   typedef enum {NONE, WHITE, GREEN, RED, BLUE, ORANGE, YELLOW} color_t;
   typedef enum {TOP, LEFT, FRONT, RIGHT, BACK, BOTTOM} side_t;
