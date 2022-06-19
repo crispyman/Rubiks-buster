@@ -9,12 +9,13 @@
 
 ## Andrew's Time
 
-| Date  | Hours | Notes                                                                                               |
-|-------|-------|-----------------------------------------------------------------------------------------------------|
-| 06-15 | 3:00  | Working on initialization and rotation methods created makefile                                     |
-| 06-16 | 3:00  | Wrote function to check if cube is solved, refactored code to use stuct to track movement           |
-| 06-17 | 3:00  | Rewrote scramble, Started work on RUBIKS_SEQENTIAL, started work on how to find identical rotations |
-| Total | 3:00  |                                                                                                     |
+| Date  | Hours | Notes                                                                                                                     |
+|-------|-------|---------------------------------------------------------------------------------------------------------------------------|
+| 06-15 | 3:00  | Working on initialization and rotation methods created makefile                                                           |
+| 06-16 | 3:00  | Wrote function to check if cube is solved, refactored code to use stuct to track movement                                 |
+| 06-17 | 3:00  | Rewrote scramble, Started work on RUBIKS_SEQENTIAL, started work on how to find identical rotations                       |
+| 06-19 | 6:00  | Rewrote scramble, Started rewriting cube implementation, It was a mess and broken, now it less of a mess and still broken |
+| Total | 3:00  |                                                                                                                           |
 
 
 Edit this README file so that it contains the following:
