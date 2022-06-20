@@ -3,7 +3,21 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <stdio.h>
+#include <errno.h>
 #include "HELPERS.h"
+
+
+/* unixError
+ * Called when an error occurs to print an error message and exit.
+ * Borrowed from Dr. Norris's OS Labs, Thank You!
+*/
+void unixError(char * msg)
+{
+    fprintf(stderr, "%s: %s\n", msg, strerror(errno));
+    exit(1);
+}
+
 
 // Picks which rotate function to call
 void rotate(cube_t *cube, rotate_action_t act) {
@@ -30,7 +44,7 @@ void rotate(cube_t *cube, rotate_action_t act) {
 * |           |  |
 * |           |  +
 * |           | /
-* | ◀-------▶ |/
+* | -------▶ |/
 * +-----------+
 */
 void rotateX(cube_t *cube, int row, int cc) {
@@ -38,22 +52,22 @@ void rotateX(cube_t *cube, int row, int cc) {
 
     if (!cc) {
         // Copies start cube into temp space starting with first side (FRONT)
-        memcpy(temp, &(*cube)[cycleX[0]][row], N * sizeof(int));
+        memcpy(temp, (*cube)[cycleX[0]][row], N * sizeof(int));
         // Copies each row back to the previous side
         for (int i = 0; i < 3; i++) {
-            memcpy(&(*cube)[cycleX[i]][row], &(*cube)[cycleX[i + 1]][row], N * sizeof(int));
+            memcpy((*cube)[cycleX[i]][row], (*cube)[cycleX[i + 1]][row], N * sizeof(int));
         }
         // Copies temp back into last row (LEFT)
-        memcpy(&(*cube)[cycleX[3]][row], temp, N * sizeof(int));
+        memcpy((*cube)[cycleX[3]][row], temp, N * sizeof(int));
     } else {
         // Copies start cube into temp space starting with last side (LEFT)
-        memcpy(temp, &cube[cycleX[3]][row], N * sizeof(int));
+        memcpy(temp, (*cube)[cycleX[3]][row], N * sizeof(int));
         // Copies each row to the next side
         for (int i = 3; i > 0; i--) {
-            memcpy(&(*cube)[cycleX[i - 1]][row], &(*cube)[cycleX[i]][row], N * sizeof(int));
+            memcpy((*cube)[cycleX[i]][row], (*cube)[cycleX[i-1]][row], N * sizeof(int));
         }
         // Copies temp back into First row (Front)
-        memcpy(&(*cube)[cycleX[0]][row], temp, N * sizeof(int));
+        memcpy((*cube)[cycleX[0]][row], temp, N * sizeof(int));
     }
 
     // Call rotate face if it's on an edge
@@ -73,7 +87,7 @@ void rotateX(cube_t *cube, int row, int cc) {
  * |    ▲      |  |
  * |    |      |  +
  * |    |      | /
- * |    ▼      |/
+ * |    |      |/
  * +-----------+
  */
 void rotateY(cube_t *cube, int col, int cc) {
@@ -126,7 +140,7 @@ void rotateY(cube_t *cube, int col, int cc) {
  *
  *    +-----------+
  *   /           /|
- *  / ◀-------▶ / |
+ *  / --------▶ / |
  * +-----------+▲ |
  * |           || |
  * |           || +
@@ -160,7 +174,7 @@ void rotateZ(cube_t *cube, int col, int cc) {
             temp[i] = (*cube)[cycleZ[3]][i][col];
         }
         // Copies each column to the next side
-        //TODO: Isn't it columns on the sides the rows on Top?
+        //TODO: Isn't it columns on the sides the rows on Top and bottom?
         for (int i = 3; i > 0; i--) {
             for (int j = 0; j < N; j++) {
                 (*cube)[cycleZ[i + 1]][j][col] = (*cube)[cycleZ[i]][j][col];
@@ -184,10 +198,14 @@ void rotateZ(cube_t *cube, int col, int cc) {
 
 // Just ensures that each spot has a valid color in it, does not check edges
 void verifyValid(cube_t *cube) {
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < SIDES; i++) {
         for (int j = 0; j < N; j++) {
             for (int k = 0; k < N; k++) {
-                assert((*cube)[i][j][k] > NONE && (*cube)[i][j][k] <= YELLOW);
+                if (!((*cube)[i][j][k] > NONE && (*cube)[i][j][k] <= YELLOW)) {
+                    //borrowed from an OS lab, Thanks Dr. Norris!
+                    fprintf(stderr, "\033[91mERROR: Side: %d x:%d y: %d Value: %d\033[0m\n", i, j, k, (*cube)[i][j][k]);
+                    exit(1);
+                }
             }
         }
     }
@@ -249,6 +267,7 @@ void rotate_face(cube_t *cube, int side, int cc) {
     }
 }
 
+//TODO: replace with function to check hashed solution
 //bool checkSolved(cube_t* cube) {
 //    int front_color = NONE;
 //    int back_color = NONE;
@@ -301,3 +320,6 @@ void rotate_face(cube_t *cube, int side, int cc) {
 //    return true;
 //}
 // Given a populated plane, rotate it 90% either clockwise or counter clockwise.
+
+
+

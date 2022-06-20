@@ -18,7 +18,7 @@ void scramble(cube_t* cube);
 
 int main(int argc, char * argv[]) {
     srand(time(0));
-    cube_t *my_cube = malloc(N * N * 6 * sizeof(int));
+    cube_t *my_cube = malloc(N * N * SIDES * sizeof(int));
     initialize(my_cube);
     verifyValid(my_cube);
     printf("initialize produces valid output\n");
@@ -32,7 +32,7 @@ int main(int argc, char * argv[]) {
 }
 
 void initialize(cube_t* cube){
-    for (int i = 0; i < N; i++){
+    for (int i = 0; i < SIDES; i++){
         for (int j = 0; j < N; j++) {
             for (int k = 0; k < N; k ++){
                     if (i == TOP)
@@ -54,9 +54,9 @@ void initialize(cube_t* cube){
 
 void scramble(cube_t* cube) {
 
-    for (unsigned int i = 0; i < 2; i++) {
+    for (unsigned int i = 0; i < 2000; i++) {
         rotate_action_t action = {
-            .index = rand() % N,
+            .index = rand() % 3,
             .a = rand() % 3,
             .cc = rand() % 2,
         };
