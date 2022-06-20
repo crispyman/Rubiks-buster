@@ -27,11 +27,6 @@
     // Sub cube rotation definition.
     typedef enum {R_UP, R_DOWN, R_LEFT, R_RIGHT} rotate_t;
 
-    // The side_t enum was in a weird order, so I made these Cycles to use.
-    const static side_t cycleX[] = {FRONT, RIGHT, BACK, LEFT};
-    const static side_t cycleY[] = {FRONT, TOP, BACK, BOTTOM};
-    const static side_t cycleZ[] = {RIGHT, BOTTOM, LEFT, TOP};
-
     // N x N x 6 rubix cube definition definition.
     typedef color_t cube_t[SIDES][N][N];
 

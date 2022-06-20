@@ -22,168 +22,196 @@ void unixError(char * msg)
 // Picks which rotate function to call.
 void rotate(cube_t *cube, rotate_action_t act) {
     if (act.a == XY) {
-        rotateX(cube, act.index, act.cc);
-    } else if (act.a == YZ) {
-        rotateY(cube, act.index, act.cc);
-    } else if (act.a == XZ) {
         rotateZ(cube, act.index, act.cc);
+    } else if (act.a == YZ) {
+        rotateX(cube, act.index, act.cc);
+    } else if (act.a == XZ) {
+        rotateY(cube, act.index, act.cc);
     }
 }
 
-// NOTES ON ALL: For reference for clockwise or counterclockwise I use the
-// perspective of front, right, or top, like in the images.
-// Look at cycles in HELPERS.h to see clockwise cycles
-// I used memcpy for no reason except speed.
-
-//     +-----------+
-//    /           /|
-//   /           / |
-//  +-----------+  |
-//  |           |  |
-//  |           |  +
-//  |           | /
-//  | --------▶ |/
-//  +-----------+
-void rotateX(cube_t *cube, int row, int cc) {
+// Rotate a plane around the X-axis relative to the right.
+// Indexing:
+//    210
+//    210
+//    210
+// 222210000012
+// 222210000012
+// 222210000012
+//    210
+//    210
+//    210
+void rotateX(cube_t *cube, int idx, int cc) {
+    // Allocate temporary storage for a N-length segment.
     int temp[N];
 
-    if (!cc) {
-        // Copies start cube into temp space starting with first side (FRONT)
-        memcpy(temp, (*cube)[cycleX[0]][row], N * sizeof(int));
-        // Copies each row back to the previous side
-        for (int i = 0; i < 3; i++) {
-            memcpy((*cube)[cycleX[i]][row], (*cube)[cycleX[i + 1]][row], N * sizeof(int));
-        }
-        // Copies temp back into last row (LEFT)
-        memcpy((*cube)[cycleX[3]][row], temp, N * sizeof(int));
-    } else {
-        // Copies start cube into temp space starting with last side (LEFT)
-        memcpy(temp, (*cube)[cycleX[3]][row], N * sizeof(int));
-        // Copies each row to the next side
-        for (int i = 3; i > 0; i--) {
-            memcpy((*cube)[cycleX[i]][row], (*cube)[cycleX[i-1]][row], N * sizeof(int));
-        }
-        // Copies temp back into First row (Front)
-        memcpy((*cube)[cycleX[0]][row], temp, N * sizeof(int));
+    if (!cc) { // If clockwise.
+        // Save front.
+        for (int i = 0; i < N; i++)
+            temp[i] = (*cube)[FRONT][(N - 1) - i][(N - 1) - idx];
+
+        // Move bottom to front.
+        for (int i = 0; i < N; i++)
+            (*cube)[FRONT][(N - 1) - i][(N - 1) - idx] = (*cube)[BOTTOM][(N - 1) - i][(N - 1) - idx];
+
+        // Move back to bottom.
+        for (int i = 0; i < N; i++)
+            (*cube)[BOTTOM][(N - 1) - i][(N - 1) - idx] = (*cube)[BACK][i][idx];
+
+        // Move top to back.
+        for (int i = 0; i < N; i++)
+            (*cube)[BACK][i][idx] = (*cube)[TOP][(N - 1) - i][(N - 1) - idx];
+
+        // Move front to top.
+        for (int i = 0; i < N; i++)
+            (*cube)[TOP][(N - 1) - i][(N - 1) - idx] = temp[i];
+    } else { // If counter-clockwise.
+        // Save front.
+        for (int i = 0; i < N; i++)
+            temp[i] = (*cube)[FRONT][i][(N - 1) - idx];
+
+        // Move top to front
+        for (int i = 0; i < N; i++)
+            (*cube)[FRONT][i][(N - 1) - idx] = (*cube)[TOP][i][(N - 1) - idx];
+
+        // Move back to top
+        for (int i = 0; i < N; i++)
+            (*cube)[TOP][i][(N - 1) - idx] = (*cube)[BACK][(N - 1) - i][idx];
+
+        // Move bottom to back
+        for (int i = 0; i < N; i++)
+            (*cube)[BACK][(N - 1) - i][idx] = (*cube)[BOTTOM][i][(N - 1) - idx];
+
+        // Move front to bottom
+        for (int i = 0; i < N; i++)
+            (*cube)[BOTTOM][i][(N - 1) - idx] = temp[i];
     }
 
     // Call rotate face if it's on an edge
-    if (row == 0) {
-        rotate_face(cube, TOP, cc);
-    } else if (row == N - 1) {
-        rotate_face(cube, BOTTOM, cc);
-
-    }
+    if (idx == 0) rotate_face(cube, RIGHT, cc);
+    if (idx == N - 1) rotate_face(cube, LEFT, cc);
 }
 
-//     +-----------+
-//    /           /|
-//   /           / |
-//  +-----------+  |
-//  |    ▲      |  |
-//  |    |      |  +
-//  |    |      | /
-//  |    |      |/
-//  +-----------+
-void rotateY(cube_t *cube, int col, int cc) {
+
+
+// Rotate a plane around the Y-axis, relative to the top.
+// Indexing:
+//    000
+//    000
+//    000
+// 000000000000
+// 111111111111
+// 222222222222
+//    222
+//    222
+//    222
+void rotateY(cube_t *cube, int idx, int cc) {
     int temp[N];
+
     if (!cc) {
-        // Copies start cube into temp space starting with first side (FRONT)
-        for (int i = 0; i < N; i++) {
-            temp[i] = (*cube)[cycleY[0]][i][col];
-        }
-        // Copies each column to the next side
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < N; j++) {
-                (*cube)[cycleY[i]][j][col] = (*cube)[cycleY[i + 1]][j][col];
-            }
-        }
-        // Copies temp back into last row
-        for (int i = 0; i < N; i++) {
-            (*cube)[cycleY[3]][i][col] = temp[i];
+        // Save front.
+        for (int i = 0; i < N; i++)
+            temp[i] = (*cube)[FRONT][idx][(N - 1) - i];
 
-        }
+        // Move right to front.
+        for (int i = 0; i < N; i++)
+            (*cube)[FRONT][idx][(N - 1) - i] = (*cube)[RIGHT][idx][(N - 1) - i];
+
+         // Move back to right.
+        for (int i = 0; i < N; i++)
+            (*cube)[RIGHT][idx][(N - 1) - i] = (*cube)[BACK][idx][(N - 1) - i];
+        
+        // Move left to back.
+        for (int i = 0; i < N; i++)
+            (*cube)[BACK][idx][(N - 1) - i] = (*cube)[LEFT][idx][(N - 1) - i];
+
+        // Move front to left.
+        for (int i = 0; i < N; i++)
+            (*cube)[LEFT][idx][(N - 1) - i] = temp[i];
     } else {
-        // Copies start cube into temp space starting with first side (BOTTOM)
-        for (int i = 0; i < N; i++) {
-            temp[i] = (*cube)[cycleY[3]][i][col];
-        }
-        // Copies each column to the next side
-        for (int i = 3; i > 0; i--) {
-            for (int j = 0; j < N; j++) {
-                (*cube)[cycleY[i + 1]][j][col] = (*cube)[cycleY[i]][j][col];
-            }
-        }
-        // Copies temp back into last row (FRONT)
-        for (int i = 0; i < N; i++) {
-            (*cube)[cycleY[0]][i][col] = temp[i];
+        // Save front.
+        for (int i = 0; i < N; i++)
+            temp[i] = (*cube)[FRONT][idx][i];
 
-        }
+        // Move left to front.
+        for (int i = 0; i < N; i++)
+            (*cube)[FRONT][idx][i] = (*cube)[LEFT][idx][i];
+
+        // Move back to left.
+        for (int i = 0; i < N; i++)
+            (*cube)[LEFT][idx][i] = (*cube)[BACK][idx][i];
+
+        // Move right to back.
+        for (int i = 0; i < N; i++)
+            (*cube)[BACK][idx][i] = (*cube)[RIGHT][idx][i];
+
+        // Move front to right.
+        for (int i = 0; i < N; i++)
+            (*cube)[RIGHT][idx][i] = temp[i];
     }
     // Call rotate face if it's on an edge
-    if (col == 0) {
-        rotate_face(cube, LEFT, cc);
-
-    } else if (col == N - 1) {
-        rotate_face(cube, RIGHT, cc);
-
-    }
+    if (idx == 0) rotate_face(cube, TOP, cc);
+    if (idx == N - 1) rotate_face(cube, BOTTOM, cc);
 }
 
-//     +-----------+
-//    /           /|
-//   / --------▶ / |
-//  +-----------+▲ |
-//  |           || |
-//  |           || +
-//  |           |▼/
-//  |           |/
-//  +-----------+
-void rotateZ(cube_t *cube, int col, int cc) {
+// Rotate a plane around the Z-axis, relative to the front.
+// Indexing:
+//    222
+//    111
+//    000
+// 210000012222
+// 210000012222
+// 210000012222
+//    000
+//    111
+//    222
+void rotateZ(cube_t* cube, int idx, int cc) {
     int temp[N];
     if (!cc) {
-        // Copies start cube into temp space starting with first side (RIGHT)
-        for (int i = 0; i < N; i++) {
-            temp[i] = (*cube)[cycleZ[0]][i][col];
-        }
-        // Copies each column to the next side
-        //TODO: Isn't it columns on the sides the rows on Top?
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < N; j++) {
-                (*cube)[cycleZ[i]][j][col] = (*cube)[cycleZ[i + 1]][j][col];
-            }
-        }
-        // Copies temp back into last row (TOP)
-        for (int i = 0; i < N; i++) {
-            (*cube)[cycleZ[3]][i][col] = temp[i];
+        // Save left.
+        for (int i = 0; i < N; i++)
+            temp[i] = (*cube)[LEFT][(N - 1) - i][(N - 1) - idx];
 
-        }
+        // Move bottom to left.
+        for (int i = 0; i < N; i++)
+            (*cube)[LEFT][(N - 1) - i][(N - 1) - idx] = (*cube)[BOTTOM][idx][(N - 1) - i];
+
+        // Move right to bottom.
+        for (int i = 0; i < N; i++)
+            (*cube)[BOTTOM][idx][(N - 1) - i] = (*cube)[RIGHT][i][idx];
+
+        // Move top to right.
+        for (int i = 0; i < N; i++)
+            (*cube)[RIGHT][i][idx] = (*cube)[TOP][(N - 1) - idx][i];
+
+        // Move left to top.
+        for (int i = 0; i < N; i++)
+            (*cube)[TOP][(N - 1) - idx][i] = temp[i];
     } else {
-        // Copies start cube into temp space starting with first side (TOP)
-        for (int i = 0; i < N; i++) {
-            temp[i] = (*cube)[cycleZ[3]][i][col];
-        }
-        // Copies each column to the next side
-        //TODO: Isn't it columns on the sides the rows on Top and bottom?
-        for (int i = 3; i > 0; i--) {
-            for (int j = 0; j < N; j++) {
-                (*cube)[cycleZ[i + 1]][j][col] = (*cube)[cycleZ[i]][j][col];
-            }
-        }
-        // Copies temp back into last row (RIGHT)
-        for (int i = 0; i < N; i++) {
-            (*cube)[cycleZ[0]][i][col] = temp[i];
+        // Save left.
+        for (int i = 0; i < N; i++)
+            temp[i] = (*cube)[LEFT][i][(N - 1) - idx];
 
-        }
+        // Move top to left.
+        for (int i = 0; i < N; i++)
+            (*cube)[LEFT][i][(N - 1) - idx] = (*cube)[TOP][(N - 1) - idx][(N - 1) - i];
+
+        // Move right to top.
+        for (int i = 0; i < N; i++)
+            (*cube)[TOP][(N - 1) - idx][(N - 1) - i] = (*cube)[RIGHT][(N - 1) - i][idx];
+
+        // Move bottom to right.
+        for (int i = 0; i < N; i++)
+            (*cube)[RIGHT][(N - 1) - i][idx] = (*cube)[BOTTOM][idx][i];
+
+        // move left to bottom.
+        for (int i = 0; i < N; i++)
+            (*cube)[BOTTOM][idx][i] = temp[i];
     }
+
     // Call rotate face if it's on an edge
-    if (col == 0) {
-        rotate_face(cube, FRONT, cc);
-
-    } else if (col == N - 1) {
-        rotate_face(cube, BACK, cc);
-
-    }
+    if (idx == 0) rotate_face(cube, FRONT, cc);
+    if (idx == N - 1) rotate_face(cube, BACK, cc);
 }
 
 // Just ensures that each spot has a valid color in it, does not check edges
@@ -207,52 +235,18 @@ void verifyValid(cube_t *cube) {
  * is on an edge.
  */
 void rotate_face(cube_t *cube, side_t side, int cc) {
-    color_t temp;
-    // This should loop over each ring working inwards only works once rn because 3x3
-    for (int i = 0; i < N/2; i++) {
-        // works over the length of a segment of the cycle and rotates it
-        for (int j = i; j < (N - i); j++) {
-            if (cc) {
-                /* This for loop defines our cycles around the edges
-                 * So if i, j are (0,0) we would store it in temp
-                 * Then rotate (3, 0) into (0, 0)
-                 * Then rotate (3, 3) into (3, 0)
-                 * Then rotate (0, 3) into (3, 3)
-                 * Then store temp in (0, 3)
-                 */
-                for (int k = 0; k < 4; k++) {
-                    if (k == 0) {
-                        temp = (*cube)[side][i][j];
-                        (*cube)[side][i][j] = (*cube)[side][j][N-1 - i];
-                    }
-                    if (k == 1) {
-                        (*cube)[side][j][N-1 - i] = (*cube)[side][N-1 - i][N-1 - j];
-                    }
-                    if (k == 2) {
-                        (*cube)[side][N-1 - i][N-1 - j] = (*cube)[side][N-1 - j][i];
-                    }
-                    if (k == 3) {
-                        (*cube)[side][N-1 - j][i] = temp;
-                    }
-                }
-            } else {
-                // The same rotation as above but in reverse
-                for (int k = 0; k < 4; k++) {
-                    if (k == 0) {
-                        temp = (*cube)[side][N - j][i];
-                        (*cube)[side][N-1 - j][i] = (*cube)[side][N-1 - i][N-1 - j];
-                    }
-                    if (k == 1) {
-                        (*cube)[side][N-1 - i][N-1 - j] = (*cube)[side][j][N-1 - i];
-                    }
-                    if (k == 2) {
-                        (*cube)[side][j][N-1 - i] = (*cube)[side][i][j];
-                    }
-                    if (k == 3) {
-                        (*cube)[side][i][j] = temp;
-                    }
-                }
-            }
+    // Allocate space for a temporary NxN array.
+    color_t temp_face[N][N];
+
+    // Copy over original face
+    memcpy(temp_face, (*cube)[side], N * N * sizeof(color_t));
+
+    // Store each color to it's appropriate post-rotation location.s
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            (*cube)[side][i][j] = cc
+                ? temp_face[j][(N - 1) - i]
+                : temp_face[(N - 1) - j][i];
         }
     }
 }
@@ -313,6 +307,7 @@ bool checkSolved(cube_t* cube) {
 
 
 void print_cube(cube_t* cube) {
+    printf("\n");
     // Print top.
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) printf(" ");
@@ -323,23 +318,29 @@ void print_cube(cube_t* cube) {
     // Print middle.
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) print_color((*cube)[LEFT][i][j]);
-
         for (int j = 0; j < N; j++) print_color((*cube)[FRONT][i][j]);
-
         for (int j = 0; j < N; j++) print_color((*cube)[RIGHT][i][j]);
-
         for (int j = 0; j < N; j++) print_color((*cube)[BACK][i][j]);
-
         printf("\n");
     }
 
     // Print bottom.
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) printf(" ");
-            for (int j = 0; j < N; j++) print_color((*cube)[BOTTOM][i][j]);
+        for (int j = 0; j < N; j++) print_color((*cube)[BOTTOM][i][j]);
         printf("\n");
     }
 }
+
+//    012
+//    345
+//    678
+// 012012012012
+// 345345345345
+// 678678678678
+//    012
+//    345
+//    678
 
 void print_color(color_t color) {
     switch (color) {

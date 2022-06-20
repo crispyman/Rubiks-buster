@@ -44,34 +44,12 @@ int main(int argc, char * argv[]) {
 
 
 
-    verifyValid(my_cube);
-
     print_cube(my_cube);
-
 
     free(my_cube);
 }
 
-// void initialize(cube_t* cube){
-//     for (int i = 0; i < SIDES; i++){
-//         for (int j = 0; j < N; j++) {
-//             for (int k = 0; k < N; k ++){
-//                     if (i == TOP)
-//                         (*cube)[i][j][k] = WHITE;
-//                     if (i == LEFT)
-//                         (*cube)[i][j][k] = GREEN;
-//                     if (i == FRONT)
-//                         (*cube)[i][j][k] = RED;
-//                     if (i == RIGHT)
-//                         (*cube)[i][j][k] = BLUE;
-//                     if (i == BACK)
-//                         (*cube)[i][j][k] = ORANGE;
-//                     if (i == BOTTOM)
-//                         (*cube)[i][j][k] = YELLOW;
-//             }
-//         }
-//     }
-// }
+// Initialize each of the 6 sides of the cube to the appropriate color.
 void initialize(cube_t* cube){
     for (int j = 0; j < N; j++) {
         for (int k = 0; k < N; k ++){
@@ -85,15 +63,14 @@ void initialize(cube_t* cube){
     }
 }
 
+// Perform N_SCRAMBLES random rotations on a provided cube.
 void scramble(cube_t* cube) {
-
     for (unsigned int i = 0; i < N_SCRAMBLES; i++) {
         rotate_action_t action = {
             .index = rand() % N,
             .a = rand() % 3,
             .cc = rand() % 2,
         };
-
         rotate(cube, action);
     }
 }
