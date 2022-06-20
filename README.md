@@ -5,7 +5,10 @@
 | Date  | Hours | Notes                                                                                     |
 |-------|-------|-------------------------------------------------------------------------------------------|
 | 06-15 | 2:00  | Working on setting up the representation of the cube as well as the methods to rotate it. |
-| Total | 2:00  |                                                                                           |
+| 06-16 | 1:30  | NOTES |
+| 06-16 | 2:00  | NOTES |
+| 06-16 | 1:20  | NOTES |
+| Total | 6:50  |                                                                                           |
 
 ## Andrew's Time
 

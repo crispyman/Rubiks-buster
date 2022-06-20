@@ -19,7 +19,7 @@ void unixError(char * msg)
 }
 
 
-// Picks which rotate function to call
+// Picks which rotate function to call.
 void rotate(cube_t *cube, rotate_action_t act) {
     if (act.a == XY) {
         rotateX(cube, act.index, act.cc);
@@ -28,25 +28,22 @@ void rotate(cube_t *cube, rotate_action_t act) {
     } else if (act.a == XZ) {
         rotateZ(cube, act.index, act.cc);
     }
-
 }
-///NOTES ON ALL: For reference for clockwise or counterclockwise I use the perspective of front, right, or top, like in the images
-/// Look at cycles in HELPERS.h to see clockwise cycles
-/*
-*
-* I used memcpy for no reason except speed.
-*
-*
-*    +-----------+
-*   /           /|
-*  /           / |
-* +-----------+  |
-* |           |  |
-* |           |  +
-* |           | /
-* | -------▶ |/
-* +-----------+
-*/
+
+// NOTES ON ALL: For reference for clockwise or counterclockwise I use the
+// perspective of front, right, or top, like in the images.
+// Look at cycles in HELPERS.h to see clockwise cycles
+// I used memcpy for no reason except speed.
+
+//     +-----------+
+//    /           /|
+//   /           / |
+//  +-----------+  |
+//  |           |  |
+//  |           |  +
+//  |           | /
+//  | --------▶ |/
+//  +-----------+
 void rotateX(cube_t *cube, int row, int cc) {
     int temp[N];
 
@@ -79,17 +76,15 @@ void rotateX(cube_t *cube, int row, int cc) {
     }
 }
 
-/*
- *    +-----------+
- *   /           /|
- *  /           / |
- * +-----------+  |
- * |    ▲      |  |
- * |    |      |  +
- * |    |      | /
- * |    |      |/
- * +-----------+
- */
+//     +-----------+
+//    /           /|
+//   /           / |
+//  +-----------+  |
+//  |    ▲      |  |
+//  |    |      |  +
+//  |    |      | /
+//  |    |      |/
+//  +-----------+
 void rotateY(cube_t *cube, int col, int cc) {
     int temp[N];
     if (!cc) {
@@ -135,20 +130,15 @@ void rotateY(cube_t *cube, int col, int cc) {
     }
 }
 
-
-/*
- *
- *    +-----------+
- *   /           /|
- *  / --------▶ / |
- * +-----------+▲ |
- * |           || |
- * |           || +
- * |           |▼/
- * |           |/
- * +-----------+
- */
-
+//     +-----------+
+//    /           /|
+//   / --------▶ / |
+//  +-----------+▲ |
+//  |           || |
+//  |           || +
+//  |           |▼/
+//  |           |/
+//  +-----------+
 void rotateZ(cube_t *cube, int col, int cc) {
     int temp[N];
     if (!cc) {
@@ -216,7 +206,7 @@ void verifyValid(cube_t *cube) {
  * Helper for the rotate functions, rotates neighboring side if row getting rotated
  * is on an edge.
  */
-void rotate_face(cube_t *cube, int side, int cc) {
+void rotate_face(cube_t *cube, side_t side, int cc) {
     color_t temp;
     // This should loop over each ring working inwards only works once rn because 3x3
     for (int i = 0; i < N/2; i++) {
@@ -322,4 +312,67 @@ void rotate_face(cube_t *cube, int side, int cc) {
 // Given a populated plane, rotate it 90% either clockwise or counter clockwise.
 
 
+void print_cube(cube_t* cube) {
+    // Print top.
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) printf(" ");
+        for (int j = 0; j < N; j++) print_color((*cube)[TOP][i][j]);
+        printf("\n");
+    }
 
+    // Print middle.
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) print_color((*cube)[LEFT][i][j]);
+
+        for (int j = 0; j < N; j++) print_color((*cube)[FRONT][i][j]);
+
+        for (int j = 0; j < N; j++) print_color((*cube)[RIGHT][i][j]);
+
+        for (int j = 0; j < N; j++) print_color((*cube)[BACK][i][j]);
+
+        printf("\n");
+    }
+
+    // Print bottom.
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) printf(" ");
+            for (int j = 0; j < N; j++) print_color((*cube)[BOTTOM][i][j]);
+        printf("\n");
+    }
+}
+
+void print_color(color_t color) {
+    switch (color) {
+        case WHITE: {
+            printf("\033[1;37m"); // white
+            break;
+        }
+        case GREEN: {
+            printf("\033[1;32m"); // green
+            break;
+        }
+        case RED: {
+            printf("\033[1;31m"); // red
+            break;
+        }
+        case BLUE: {
+            printf("\033[1;34m"); // blue
+            break;
+        }
+        case ORANGE: {
+            printf("\033[1;35m"); // orange
+            break;
+        }
+        case YELLOW: {
+            printf("\033[1;33m"); // yellow
+            break;
+        }
+        default: {
+            printf("\e[41m");
+            break;
+        }
+    }
+
+    printf("X");
+    printf("\e[0m");
+}
