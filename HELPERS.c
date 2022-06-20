@@ -30,9 +30,6 @@ void rotate(cube_t *cube, rotate_action_t act) {
     }
 }
 
-// NOTES ON ALL: For reference for clockwise or counterclockwise I use the
-// perspective of front, right, or top, like in the images.
-
 // Rotate a plane around the X-axis relative to the right.
 // Indexing:
 //    210
@@ -45,9 +42,10 @@ void rotate(cube_t *cube, rotate_action_t act) {
 //    210
 //    210
 void rotateX(cube_t *cube, int idx, int cc) {
+    // Allocate temporary storage for a N-length segment.
     int temp[N];
 
-    if (!cc) {
+    if (!cc) { // If clockwise.
         // Save front.
         for (int i = 0; i < N; i++)
             temp[i] = (*cube)[FRONT][(N - 1) - i][(N - 1) - idx];
@@ -67,24 +65,24 @@ void rotateX(cube_t *cube, int idx, int cc) {
         // Move front to top.
         for (int i = 0; i < N; i++)
             (*cube)[TOP][(N - 1) - i][(N - 1) - idx] = temp[i];
-    } else {
-        // save front.
+    } else { // If counter-clockwise.
+        // Save front.
         for (int i = 0; i < N; i++)
             temp[i] = (*cube)[FRONT][i][(N - 1) - idx];
 
-        // move top to front
+        // Move top to front
         for (int i = 0; i < N; i++)
             (*cube)[FRONT][i][(N - 1) - idx] = (*cube)[TOP][i][(N - 1) - idx];
 
-        // move back to top
+        // Move back to top
         for (int i = 0; i < N; i++)
             (*cube)[TOP][i][(N - 1) - idx] = (*cube)[BACK][(N - 1) - i][idx];
 
-        // move bottom to back
+        // Move bottom to back
         for (int i = 0; i < N; i++)
             (*cube)[BACK][(N - 1) - i][idx] = (*cube)[BOTTOM][i][(N - 1) - idx];
 
-        // move front to bottom
+        // Move front to bottom
         for (int i = 0; i < N; i++)
             (*cube)[BOTTOM][i][(N - 1) - idx] = temp[i];
     }
@@ -237,52 +235,18 @@ void verifyValid(cube_t *cube) {
  * is on an edge.
  */
 void rotate_face(cube_t *cube, side_t side, int cc) {
-    color_t temp;
-    // This should loop over each ring working inwards only works once rn because 3x3
-    for (int i = 0; i < N/2; i++) {
-        // works over the length of a segment of the cycle and rotates it
-        for (int j = i; j < (N - i); j++) {
-            if (cc) {
-                /* This for loop defines our cycles around the edges
-                 * So if i, j are (0,0) we would store it in temp
-                 * Then rotate (3, 0) into (0, 0)
-                 * Then rotate (3, 3) into (3, 0)
-                 * Then rotate (0, 3) into (3, 3)
-                 * Then store temp in (0, 3)
-                 */
-                for (int k = 0; k < 4; k++) {
-                    if (k == 0) {
-                        temp = (*cube)[side][i][j];
-                        (*cube)[side][i][j] = (*cube)[side][j][N-1 - i];
-                    }
-                    if (k == 1) {
-                        (*cube)[side][j][N-1 - i] = (*cube)[side][N-1 - i][N-1 - j];
-                    }
-                    if (k == 2) {
-                        (*cube)[side][N-1 - i][N-1 - j] = (*cube)[side][N-1 - j][i];
-                    }
-                    if (k == 3) {
-                        (*cube)[side][N-1 - j][i] = temp;
-                    }
-                }
-            } else {
-                // The same rotation as above but in reverse
-                for (int k = 0; k < 4; k++) {
-                    if (k == 0) {
-                        temp = (*cube)[side][N - j][i];
-                        (*cube)[side][N-1 - j][i] = (*cube)[side][N-1 - i][N-1 - j];
-                    }
-                    if (k == 1) {
-                        (*cube)[side][N-1 - i][N-1 - j] = (*cube)[side][j][N-1 - i];
-                    }
-                    if (k == 2) {
-                        (*cube)[side][j][N-1 - i] = (*cube)[side][i][j];
-                    }
-                    if (k == 3) {
-                        (*cube)[side][i][j] = temp;
-                    }
-                }
-            }
+    // Allocate space for a temporary NxN array.
+    color_t temp_face[N][N];
+
+    // Copy over original face
+    memcpy(temp_face, (*cube)[side], N * N * sizeof(color_t));
+
+    // Store each color to it's appropriate post-rotation location.s
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            (*cube)[side][i][j] = cc
+                ? temp_face[j][(N - 1) - i]
+                : temp_face[(N - 1) - j][i];
         }
     }
 }

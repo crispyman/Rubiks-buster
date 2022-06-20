@@ -9,7 +9,7 @@
 | 06-16 | 2:00  | Working on the rotate functions. |
 | 06-16 | 1:20  | Worked on developing a display function. |
 | 06-20 | 2:30  | Updated the display and rotate functions to work with the new indexing method. |
-| Total | 6:50  |                                                                                           |
+| Total | 8:20  |                                                                                           |
 
 ## Andrew's Time
 
