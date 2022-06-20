@@ -89,7 +89,7 @@ void rotateX(cube_t *cube, int idx, int cc) {
 
     // Call rotate face if it's on an edge
     if (idx == 0) rotate_face(cube, RIGHT, cc);
-    if (idx == N - 1) rotate_face(cube, LEFT, cc);
+    if (idx == N - 1) rotate_face(cube, LEFT, !cc);
 }
 
 
@@ -151,7 +151,7 @@ void rotateY(cube_t *cube, int idx, int cc) {
     }
     // Call rotate face if it's on an edge
     if (idx == 0) rotate_face(cube, TOP, cc);
-    if (idx == N - 1) rotate_face(cube, BOTTOM, cc);
+    if (idx == N - 1) rotate_face(cube, BOTTOM, !cc);
 }
 
 // Rotate a plane around the Z-axis, relative to the front.
@@ -211,7 +211,7 @@ void rotateZ(cube_t* cube, int idx, int cc) {
 
     // Call rotate face if it's on an edge
     if (idx == 0) rotate_face(cube, FRONT, cc);
-    if (idx == N - 1) rotate_face(cube, BACK, cc);
+    if (idx == N - 1) rotate_face(cube, BACK, !cc);
 }
 
 // Just ensures that each spot has a valid color in it, does not check edges
