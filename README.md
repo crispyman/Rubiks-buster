@@ -5,9 +5,10 @@
 | Date  | Hours | Notes                                                                                     |
 |-------|-------|-------------------------------------------------------------------------------------------|
 | 06-15 | 2:00  | Working on setting up the representation of the cube as well as the methods to rotate it. |
-| 06-16 | 1:30  | NOTES |
-| 06-16 | 2:00  | NOTES |
-| 06-16 | 1:20  | NOTES |
+| 06-16 | 1:30  | Working on the rotate functions. |
+| 06-16 | 2:00  | Working on the rotate functions. |
+| 06-16 | 1:20  | Worked on developing a display function. |
+| 06-20 | 2:30  | Updated the display and rotate functions to work with the new indexing method. |
 | Total | 6:50  |                                                                                           |
 
 ## Andrew's Time
