@@ -18,6 +18,9 @@ void scramble(cube_t* cube);
 
 
 int main(int argc, char * argv[]) {
+    int max_solutions = 20;
+    int solutions_count = 0;
+    rotate_action_t * (*solutions) = malloc(sizeof(rotate_action_t *) * max_solutions);
     srand(time(0));
     cube_t *my_cube = malloc(N * N * SIDES * sizeof(int));
     initialize(my_cube);
@@ -25,6 +28,7 @@ int main(int argc, char * argv[]) {
     printf("initialize produces valid output\n");
 
     print_cube(my_cube);
+    printf("\n\n");
 
     scramble(my_cube);
 
@@ -73,9 +77,9 @@ void scramble(cube_t* cube) {
 
     for (unsigned int i = 0; i < N_SCRAMBLES; i++) {
         rotate_action_t action = {
-            .index = rand() % 3,
-            .a = rand() % 3,
-            .cc = rand() % 2,
+            .index = 2,
+            .a = 3,
+            .cc = 1,
         };
 
         rotate(cube, action);
