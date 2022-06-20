@@ -34,6 +34,7 @@ int main(int argc, char * argv[]) {
     verifyValid(my_cube);
     printf("scramble produces valid output\n");
     cube_t * seq_cube = malloc(sizeof(cube_t));
+    memcpy(seq_cube, my_cube, sizeof(cube_t));
     solution_t * seq_solution = seqentialLauncher(seq_cube);
     if (seq_solution->steps){
         printf("Solved in: %d steps\n", seq_solution->length);

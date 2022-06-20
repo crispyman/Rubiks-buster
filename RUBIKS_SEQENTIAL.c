@@ -49,6 +49,7 @@ rotate_action_t* seqentialSolver(cube_t *cube, rotate_action_t action, int step)
 
 
     rotate(cube, action);
+
     // if debugging make sure each step results in valid output, NOTE: Probably very slow
     if (DEBUG) {
         printf("step: %d\n", step);

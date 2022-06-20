@@ -4,8 +4,8 @@
 
     #define SIDES 6
     #define N 3
-    #define DEBUG 1
-    #define N_SCRAMBLES 100
+    #define DEBUG 0
+    #define N_SCRAMBLES 3
     #define MAX_SOLUTION_LENGTH 3
 
     /* ----- Type Definitions ----- */
