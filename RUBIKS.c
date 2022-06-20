@@ -20,6 +20,8 @@ int main(int argc, char * argv[]) {
     srand(time(0));
     cube_t *my_cube = malloc(N * N * 6 * sizeof(int));
     initialize(my_cube);
+    verifyValid(my_cube);
+    printf("initialize produces valid output\n");
 
     scramble(my_cube);
 

@@ -18,9 +18,10 @@
       int cc;
   } rotate_action_t;
 
+  // the side_t enum was in a weird order, so I made these Cycles to use
   const static side_t cycleX[] = {FRONT, RIGHT, BACK, LEFT};
-  const static side_t cycleY[] = {RIGHT, BOTTOM, LEFT, TOP};
-  const static side_t cycleZ[] = {FRONT, TOP, BACK, BOTTOM};
+  const static side_t cycleY[] = {FRONT, TOP, BACK, BOTTOM};
+  const static side_t cycleZ[] = {RIGHT, BOTTOM, LEFT, TOP};
 
 
 
@@ -28,8 +29,8 @@
   // void rotate(cube_t* cube, int x, int y, int z, axes_t a, int cc);
     void rotate(cube_t* cube, rotate_action_t act);
     void rotateX(cube_t* cube,int row, int cc);
-    void rotateY(cube_t* cube,int row, int cc);
-    void rotateZ(cube_t* cube,int row, int cc);
+    void rotateY(cube_t* cube,int col, int cc);
+    void rotateZ(cube_t* cube,int col, int cc);
 
   void rotate_face(cube_t* cube, int side, int cc);
 
