@@ -13,13 +13,15 @@
 #include "HELPERS.h"
 
 void initialize(cube_t* cube);
-void verifyValid(cube_t* cube);
 void scramble(cube_t* cube);
 
 
 int main(int argc, char * argv[]) {
-    cube_t *my_cube = malloc(N * N * N * 6 * sizeof(int));
+    srand(time(0));
+    cube_t *my_cube = malloc(N * N * SIDES * sizeof(int));
     initialize(my_cube);
+    verifyValid(my_cube);
+    printf("initialize produces valid output\n");
 
     scramble(my_cube);
 
@@ -30,33 +32,21 @@ int main(int argc, char * argv[]) {
 }
 
 void initialize(cube_t* cube){
-    for (int i = 0; i < N; i++){
+    for (int i = 0; i < SIDES; i++){
         for (int j = 0; j < N; j++) {
             for (int k = 0; k < N; k ++){
-                    if (i == 0)
-                        (*cube)[i][j][k][TOP] = WHITE;
-                    else
-                        (*cube)[i][j][k][TOP] = NONE;
-                    if (j == 0)
-                        (*cube)[i][j][k][LEFT] = GREEN;
-                    else
-                        (*cube)[i][j][k][LEFT] = NONE;
-                    if ( k == 0)
-                        (*cube)[i][j][k][FRONT] = RED;
-                    else
-                        (*cube)[i][j][k][FRONT] = NONE;
-                    if ( j == N-1)
-                        (*cube)[i][j][k][RIGHT] = BLUE;
-                    else
-                        (*cube)[i][j][k][RIGHT] = NONE;
-                    if ( k == N-1)
-                        (*cube)[i][j][k][BACK] = ORANGE;
-                    else
-                        (*cube)[i][j][k][BACK] = NONE;
-                    if ( i == N-1)
-                        (*cube)[i][j][k][BOTTOM] = YELLOW;
-                    else
-                        (*cube)[i][j][k][BOTTOM] = NONE;
+                    if (i == TOP)
+                        (*cube)[i][j][k] = WHITE;
+                    if (i == LEFT)
+                        (*cube)[i][j][k] = GREEN;
+                    if (i == FRONT)
+                        (*cube)[i][j][k] = RED;
+                    if (i == RIGHT)
+                        (*cube)[i][j][k] = BLUE;
+                    if (i == BACK)
+                        (*cube)[i][j][k] = ORANGE;
+                    if (i == BOTTOM)
+                        (*cube)[i][j][k] = YELLOW;
             }
         }
     }
@@ -64,15 +54,11 @@ void initialize(cube_t* cube){
 
 void scramble(cube_t* cube) {
 
-    srand(time(0));
-    for (unsigned int i = 0; i < 2; i++) {
-        int temp_rand = rand();
+    for (unsigned int i = 0; i < 2000; i++) {
         rotate_action_t action = {
-            .x = (temp_rand & 0x1) ? 0 : N - 1,
-            .y = (temp_rand & 0x2) ? 0 : N - 1,
-            .z = (temp_rand & 0x4) ? 0 : N - 1,
-            .a = temp_rand & 0x18,
-            .cc = temp_rand & 0x20,
+            .index = rand() % 3,
+            .a = rand() % 3,
+            .cc = rand() % 2,
         };
 
         rotate(cube, action);
