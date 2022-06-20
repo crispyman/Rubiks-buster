@@ -11,6 +11,7 @@
 #include "mpi.h"
 #include "RUBIKS.h"
 #include "HELPERS.h"
+#include "RUBIKS_SEQENTIAL.h"
 
 // Proototypes.
 void initialize(cube_t* cube);
@@ -18,11 +19,10 @@ void scramble(cube_t* cube);
 
 
 int main(int argc, char * argv[]) {
-    int max_solutions = 20;
-    int solutions_count = 0;
-    rotate_action_t * (*solutions) = malloc(sizeof(rotate_action_t *) * max_solutions);
+
+    //rotate_action_t * best_solution = malloc(sizeof(rotate_action_t) * MAX_SOLUTION_LENGTH);
     srand(time(0));
-    cube_t *my_cube = malloc(N * N * SIDES * sizeof(int));
+    cube_t *my_cube = malloc(N * N * SIDES * sizeof(color_t));
     initialize(my_cube);
     verifyValid(my_cube);
     printf("initialize produces valid output\n");
@@ -31,6 +31,18 @@ int main(int argc, char * argv[]) {
     printf("\n\n");
 
     scramble(my_cube);
+    verifyValid(my_cube);
+    printf("scramble produces valid output\n");
+    cube_t * seq_cube = malloc(N* N * SIDES * sizeof(color_t));
+    solution_t * seq_solution = seqentialLauncher(seq_cube);
+    if (seq_solution->length < MAX_SOLUTION_LENGTH){
+        printf("Solved in: %d steps\n", seq_solution->length);
+    }
+    else
+        printf("No Solution in %d steps\n", MAX_SOLUTION_LENGTH);
+
+
+
 
     verifyValid(my_cube);
 
@@ -77,9 +89,9 @@ void scramble(cube_t* cube) {
 
     for (unsigned int i = 0; i < N_SCRAMBLES; i++) {
         rotate_action_t action = {
-            .index = 2,
-            .a = 3,
-            .cc = 1,
+            .index = rand() % N,
+            .a = rand() % 3,
+            .cc = rand() % 2,
         };
 
         rotate(cube, action);

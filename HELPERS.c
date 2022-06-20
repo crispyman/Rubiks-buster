@@ -258,57 +258,57 @@ void rotate_face(cube_t *cube, side_t side, int cc) {
 }
 
 //TODO: replace with function to check hashed solution
-//bool checkSolved(cube_t* cube) {
-//    int front_color = NONE;
-//    int back_color = NONE;
-//    int left_color = NONE;
-//    int right_color = NONE;
-//    int top_color = NONE;
-//    int bottom_color = NONE;
-//    for (int i = 0; i < N; i++) {
-//        for (int j = 0; j < N; j++) {
-//            for (int k = 0; k < N; k++) {
-//                if (i == 0) {
-//                    if (top_color == NONE)
-//                        top_color = (*cube)[i][j][k][TOP];
-//                    else if (top_color != (*cube)[i][j][k][TOP])
-//                        return false;
-//                }
-//                if (j == 0) {
-//                    if (left_color == NONE)
-//                        left_color = (*cube)[i][j][k][LEFT];
-//                    else if (left_color != (*cube)[i][j][k][LEFT])
-//                        return false;
-//                }
-//                if (k == 0){
-//                    if (front_color == NONE)
-//                        front_color = (*cube)[i][j][k][FRONT];
-//                    else if (front_color != (*cube)[i][j][k][FRONT])
-//                        return false;
-//                }
-//                if (j == N - 1){
-//                    if (right_color == NONE)
-//                        right_color = (*cube)[i][j][k][RIGHT];
-//                    else if (right_color != (*cube)[i][j][k][RIGHT])
-//                        return false;
-//                }
-//                if (k == N - 1){
-//                    if (back_color == NONE)
-//                        back_color = (*cube)[i][j][k][BACK];
-//                    else if (back_color != (*cube)[i][j][k][BACK])
-//                        return false;
-//                }
-//                if (i == N - 1){
-//                    if (bottom_color == NONE)
-//                        bottom_color = (*cube)[i][j][k][BOTTOM];
-//                    else if (bottom_color != (*cube)[i][j][k][BOTTOM])
-//                        return false;
-//                }
-//            }
-//        }
-//    }
-//    return true;
-//}
+bool checkSolved(cube_t* cube) {
+    int front_color = NONE;
+    int back_color = NONE;
+    int left_color = NONE;
+    int right_color = NONE;
+    int top_color = NONE;
+    int bottom_color = NONE;
+    for (int i = 0; i < SIDES; i++) {
+        for (int j = 0; j < N; j++) {
+            for (int k = 0; k < N; k++) {
+                if (i == 0) {
+                    if (top_color == NONE)
+                        top_color = (*cube)[i][j][k];
+                    else if (top_color != (*cube)[i][j][k])
+                        return false;
+                }
+                if (i == 1) {
+                    if (left_color == NONE)
+                        left_color = (*cube)[i][j][k];
+                    else if (left_color != (*cube)[i][j][k])
+                        return false;
+                }
+                if (i == 2){
+                    if (front_color == NONE)
+                        front_color = (*cube)[i][j][k];
+                    else if (front_color != (*cube)[i][j][k])
+                        return false;
+                }
+                if (i == 3){
+                    if (right_color == NONE)
+                        right_color = (*cube)[i][j][k];
+                    else if (right_color != (*cube)[i][j][k])
+                        return false;
+                }
+                if (i == 4){
+                    if (back_color == NONE)
+                        back_color = (*cube)[i][j][k];
+                    else if (back_color != (*cube)[i][j][k])
+                        return false;
+                }
+                if (i == 5){
+                    if (bottom_color == NONE)
+                        bottom_color = (*cube)[i][j][k];
+                    else if (bottom_color != (*cube)[i][j][k])
+                        return false;
+                }
+            }
+        }
+    }
+    return true;
+}
 // Given a populated plane, rotate it 90% either clockwise or counter clockwise.
 
 

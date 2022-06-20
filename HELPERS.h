@@ -5,7 +5,8 @@
     #define SIDES 6
     #define N 3
     #define DEBUG 1
-    #define N_SCRAMBLES 1
+    #define N_SCRAMBLES 100
+    #define MAX_SOLUTION_LENGTH 3
 
     /* ----- Type Definitions ----- */
 
@@ -33,6 +34,11 @@
 
     // N x N x 6 rubix cube definition definition.
     typedef color_t cube_t[SIDES][N][N];
+
+    typedef struct {
+        rotate_action_t * steps;
+        int length;
+    } solution_t;
 
 
     /* ----- Prototypes ----- */

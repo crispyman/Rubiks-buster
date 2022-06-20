@@ -5,7 +5,8 @@
 #ifndef RUBIKS_BUSTER_RUBIKS_SEQENTIAL_H
 #define RUBIKS_BUSTER_RUBIKS_SEQENTIAL_H
 
-bool seqentialSolver(cube_t* cube, rotate_action_t *action, int step, int max_steps);
+solution_t* seqentialLauncher(cube_t* cube);
+rotate_action_t* seqentialSolver(cube_t *cube, rotate_action_t action, int step);
 
 
 
