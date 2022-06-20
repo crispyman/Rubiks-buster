@@ -22,7 +22,7 @@ int main(int argc, char * argv[]) {
 
     //rotate_action_t * best_solution = malloc(sizeof(rotate_action_t) * MAX_SOLUTION_LENGTH);
     srand(time(0));
-    cube_t *my_cube = malloc(N * N * SIDES * sizeof(color_t));
+    cube_t *my_cube = malloc(sizeof(cube_t));
     initialize(my_cube);
     verifyValid(my_cube);
     printf("initialize produces valid output\n");
@@ -33,9 +33,9 @@ int main(int argc, char * argv[]) {
     scramble(my_cube);
     verifyValid(my_cube);
     printf("scramble produces valid output\n");
-    cube_t * seq_cube = malloc(N* N * SIDES * sizeof(color_t));
+    cube_t * seq_cube = malloc(sizeof(cube_t));
     solution_t * seq_solution = seqentialLauncher(seq_cube);
-    if (seq_solution->length < MAX_SOLUTION_LENGTH){
+    if (seq_solution->steps){
         printf("Solved in: %d steps\n", seq_solution->length);
     }
     else
