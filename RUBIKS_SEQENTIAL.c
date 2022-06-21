@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
-#include "mpi.h"
+#include<mpi/mpi.h>
 #include "HELPERS.h"
 #include "RUBIKS_SEQENTIAL.h"
 
@@ -35,7 +35,7 @@ solution_t* seqentialLauncher(cube_t* cube) {
             }
         }
     }
-    solution->steps = best_solution;
+    memcpy(solution->steps, best_solution, sizeof(rotate_action_t) * best_length);
     solution->length = best_length;
     return solution;
 

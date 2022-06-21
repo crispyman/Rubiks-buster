@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "mpi.h"
+#include<mpi/mpi.h>
 #include "RUBIKS.h"
 #include "HELPERS.h"
 #include "RUBIKS_SEQENTIAL.h"
@@ -19,6 +19,8 @@ void scramble(cube_t* cube);
 
 
 int main(int argc, char * argv[]) {
+
+    MPI_Init(NULL, NULL);
 
     //rotate_action_t * best_solution = malloc(sizeof(rotate_action_t) * MAX_SOLUTION_LENGTH);
     srand(time(0));

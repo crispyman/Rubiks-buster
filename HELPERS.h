@@ -33,8 +33,8 @@
     typedef color_t cube_t[SIDES][N][N];
 
         typedef struct {
-            rotate_action_t * steps;
             int length;
+            rotate_action_t steps[MAX_SOLUTION_LENGTH];
         } solution_t;
 
     typedef struct {
