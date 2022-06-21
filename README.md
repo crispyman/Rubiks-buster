@@ -20,7 +20,8 @@
 | 06-17 | 3:00  | Rewrote scramble, Started work on RUBIKS_SEQENTIAL, started work on how to find identical rotations                               |
 | 06-19 | 6:00  | Rewrote scramble, Started rewriting cube implementation, It was a mess and broken, now it less of a mess and still broken         |
 | 06-19 | 4:00  | Spent 4 hours chasing down a bug that was an outdated pair initialization and verification functions... rotate now passes test... |
-| Total | 19:00 |                                                                                                                                   |
+| 06-20 | 4:00  | Implemented working recursive solution, reimplemented verifyValid again, added new solution type, added solution depth limit      |
+| Total | 23:00 |                                                                                                                                   |
 
 
 Edit this README file so that it contains the following:
