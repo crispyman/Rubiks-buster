@@ -7,6 +7,7 @@
     #define DEBUG 0
     #define N_SCRAMBLES 3
     #define MAX_SOLUTION_LENGTH 3
+    #define MAX_STACK_SIZE 20
 
     /* ----- Type Definitions ----- */
 
@@ -35,6 +36,10 @@
         int length;
     } solution_t;
 
+    typedef struct {
+        rotate_action_t steps[MAX_STACK_SIZE];
+        int top;
+    } action_stack_t;
 
     /* ----- Prototypes ----- */
 
@@ -55,5 +60,11 @@
     // Display functions.
     void print_cube(cube_t* cube);
     void print_color(color_t color);
+
+    // Action stack
+    void stack_init(action_stack_t* stack);
+    bool stack_push(action_stack_t* stack, rotate_action_t act);
+    bool check_action_backtrack(action_stack_t* stack, rotate_action_t* act);
+    bool check_action_loop(action_stack_t* stack, rotate_action_t* act);
 
 #endif //RUBIKS_BUSTER_HELPERS_H

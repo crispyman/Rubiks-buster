@@ -377,3 +377,68 @@ void print_color(color_t color) {
     printf("X");
     printf("\e[0m");
 }
+
+/* ----- STACK STUFF ----- */
+
+// Given a stack pointer, set the top to 0.
+void stack_init(action_stack_t* stack) {
+    stack->top = 0;
+}
+
+// Check if a action is actually progress and if it is, push it onto the action
+// stack.
+bool stack_push(action_stack_t* stack, rotate_action_t act) {
+    // Check if stack is full.
+    if (stack->top == MAX_STACK_SIZE) return false;
+
+    // If the new action would undo the last one, return false.
+    if (check_action_backtrack(stack, &act)) return false;
+
+    // If the new action would cause a 360 degree loop, return false.
+    if (check_action_loop(stack, &act)) return false;
+
+    // Push the action onto the stack.
+    stack->steps[stack->top] = act;
+    stack->top++;
+    return true;
+}
+
+// Tell whether a new action would cause the previous action to be undone.
+bool check_action_backtrack(action_stack_t* stack, rotate_action_t* act) {
+    // If the stack is empty, return false.
+    if (stack->top == 0) return false;
+
+    // If the previous action and the new one are working on different axes,
+    // return false.
+    if (stack->steps[stack->top - 1].a != act->a) return false;
+
+    // If the previous action and the new one are working on different indexes,
+    // return false.
+    if (stack->steps[stack->top - 1].index != act->index) return false;
+
+    // If the previous action and the new one are rotating in the same
+    // direction, return false.
+    if (stack->steps[stack->top - 1].index != act->index) return false;
+
+    // All requirements have been made to consider the new action a backtrack,
+    // return true.
+    return true;
+}
+
+// Tell whether a new action would cause one roationn 4 times in a row, leading
+// leading back to the same starting state.
+bool check_action_loop(action_stack_t* stack, rotate_action_t* act) {
+    // If the stack has less than 3 actions, return false.
+    if (stack->top < 4) return false;
+
+    // Check if each of the previous 3 rotations is the same as the new one.
+    for (int i = 0; i < 3; i++) {
+        if (stack->steps[stack->top - 1 - i].a != act->a) return false;
+        if (stack->steps[stack->top - 1 - i].index != act->index) return false;
+        if (stack->steps[stack->top - 1 - i].cc != act->cc) return false;
+    }
+
+    // All requirements have been made to consider the new action a loop,
+    // return true.
+    return true;
+}
