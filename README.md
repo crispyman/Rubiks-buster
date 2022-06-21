@@ -5,11 +5,13 @@
 | Date  | Hours | Notes                                                                                     |
 |-------|-------|-------------------------------------------------------------------------------------------|
 | 06-15 | 2:00  | Working on setting up the representation of the cube as well as the methods to rotate it. |
-| 06-16 | 1:30  | Working on the rotate functions. |
-| 06-16 | 2:00  | Working on the rotate functions. |
-| 06-16 | 1:20  | Worked on developing a display function. |
-| 06-20 | 2:30  | Updated the display and rotate functions to work with the new indexing method. |
-| Total | 8:20  |                                                                                           |
+| 06-16 | 1:30  | Working on implementing the rotate functions.                                             |
+| 06-16 | 2:00  | Working on the rotate functions.                                                          |
+| 06-16 | 1:20  | Worked on developing a naive display function.                                            |
+| 06-20 | 2:30  | Updated the display and rotate functions to work with the new indexing method.            |
+| 06-21 | 2:30  | Created a stack for storing the actions taken and whether we are backtracking.            |
+| 06-21 | 2:00  | Created diagrams and started working on presentation.                                     |
+| Total | 13:50 |                                                                                           |
 
 ## Andrew's Time
 
