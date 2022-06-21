@@ -5,14 +5,14 @@
     #define SIDES 6
     #define N 3
     #define DEBUG 0
-    #define N_SCRAMBLES 3
-    #define MAX_SOLUTION_LENGTH 3
+    #define N_SCRAMBLES 6
+    #define MAX_SOLUTION_LENGTH 5
     #define MAX_STACK_SIZE 20
 
     /* ----- Type Definitions ----- */
 
     // Color definition.
-    typedef enum {NONE, WHITE, GREEN, RED, BLUE, ORANGE, YELLOW} color_t;
+    typedef enum __attribute__ ((__packed__)) {NONE, WHITE, GREEN, RED, BLUE, ORANGE, YELLOW} color_t;
 
     // Side definition.
     typedef enum {TOP, LEFT, FRONT, RIGHT, BACK, BOTTOM} side_t;
@@ -25,16 +25,17 @@
         int cc;
     } rotate_action_t;
 
+
     // Sub cube rotation definition.
     typedef enum {R_UP, R_DOWN, R_LEFT, R_RIGHT} rotate_t;
 
     // N x N x 6 rubix cube definition definition.
     typedef color_t cube_t[SIDES][N][N];
 
-    typedef struct {
-        rotate_action_t * steps;
-        int length;
-    } solution_t;
+        typedef struct {
+            rotate_action_t * steps;
+            int length;
+        } solution_t;
 
     typedef struct {
         rotate_action_t steps[MAX_STACK_SIZE];
