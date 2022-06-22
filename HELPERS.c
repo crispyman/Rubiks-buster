@@ -21,11 +21,11 @@ void unixError(char * msg)
 
 // Picks which rotate function to call.
 void rotate(cube_t *cube, rotate_action_t act) {
-    if (act.a == XY) {
+    if (act.a == Z) {
         rotateZ(cube, act.index, act.cc);
-    } else if (act.a == YZ) {
+    } else if (act.a == X) {
         rotateX(cube, act.index, act.cc);
-    } else if (act.a == XZ) {
+    } else if (act.a == Y) {
         rotateY(cube, act.index, act.cc);
     }
 }
@@ -214,22 +214,6 @@ void rotateZ(cube_t* cube, int idx, int cc) {
     if (idx == N - 1) rotate_face(cube, BACK, !cc);
 }
 
-// Just ensures that each spot has a valid color in it, does not check edges
-void verifyValid(cube_t *cube) {
-    for (int i = 0; i < SIDES; i++) {
-        for (int j = 0; j < N; j++) {
-            for (int k = 0; k < N; k++) {
-                if (!((*cube)[i][j][k] > NONE && (*cube)[i][j][k] <= YELLOW)) {
-                    //borrowed from an OS lab, Thanks Dr. Norris!
-                    fprintf(stderr, "\033[91mERROR: Side: %d x:%d y: %d Value: %d\033[0m\n", i, j, k, (*cube)[i][j][k]);
-                    exit(1);
-                }
-            }
-        }
-    }
-}
-
-
 /*
  * Helper for the rotate functions, rotates neighboring side if row getting rotated
  * is on an edge.
@@ -251,53 +235,29 @@ void rotate_face(cube_t *cube, side_t side, int cc) {
     }
 }
 
-//TODO: replace with function to check hashed solution
-bool checkSolved(cube_t* cube) {
-    int front_color = NONE;
-    int back_color = NONE;
-    int left_color = NONE;
-    int right_color = NONE;
-    int top_color = NONE;
-    int bottom_color = NONE;
+// Just ensures that each spot has a valid color in it, does not check edges
+void verifyValid(cube_t* cube) {
     for (int i = 0; i < SIDES; i++) {
         for (int j = 0; j < N; j++) {
             for (int k = 0; k < N; k++) {
-                if (i == 0) {
-                    if (top_color == NONE)
-                        top_color = (*cube)[i][j][k];
-                    else if (top_color != (*cube)[i][j][k])
-                        return false;
+                if (!((*cube)[i][j][k] > NONE && (*cube)[i][j][k] <= YELLOW)) {
+                    //borrowed from an OS lab, Thanks Dr. Norris!
+                    fprintf(stderr, "\033[91mERROR: Side: %d x: %d y: %d Value: %d\033[0m\n", i, j, k, (*cube)[i][j][k]);
+                    exit(1);
                 }
-                if (i == 1) {
-                    if (left_color == NONE)
-                        left_color = (*cube)[i][j][k];
-                    else if (left_color != (*cube)[i][j][k])
-                        return false;
-                }
-                if (i == 2){
-                    if (front_color == NONE)
-                        front_color = (*cube)[i][j][k];
-                    else if (front_color != (*cube)[i][j][k])
-                        return false;
-                }
-                if (i == 3){
-                    if (right_color == NONE)
-                        right_color = (*cube)[i][j][k];
-                    else if (right_color != (*cube)[i][j][k])
-                        return false;
-                }
-                if (i == 4){
-                    if (back_color == NONE)
-                        back_color = (*cube)[i][j][k];
-                    else if (back_color != (*cube)[i][j][k])
-                        return false;
-                }
-                if (i == 5){
-                    if (bottom_color == NONE)
-                        bottom_color = (*cube)[i][j][k];
-                    else if (bottom_color != (*cube)[i][j][k])
-                        return false;
-                }
+            }
+        }
+    }
+}
+
+// Check to see if each side contains only a single color.
+bool checkSolved(cube_t* cube) {
+    for (int i = 0; i < SIDES; i++) {
+        color_t side_color = NONE;
+        for (int j = 0; j < N; j++) {
+            for (int k = 0; k < N; k++) {
+                if (side_color == NONE) side_color = (*cube)[i][j][k];
+                else if (side_color != (*cube)[i][j][k]) return false;
             }
         }
     }
@@ -330,16 +290,8 @@ void print_cube(cube_t* cube) {
     }
 }
 
-//    012
-//    345
-//    678
-// 012012012012
-// 345345345345
-// 678678678678
-//    012
-//    345
-//    678
-
+// Print an "X" of the selected color. (There was no orange so it is replaced
+// with magenta.)
 void print_color(color_t color) {
     switch (color) {
         case WHITE: {
@@ -367,7 +319,7 @@ void print_color(color_t color) {
             break;
         }
         default: {
-            printf("\e[41m");
+            printf("\e[41m"); // Fill Red (error)
             break;
         }
     }
