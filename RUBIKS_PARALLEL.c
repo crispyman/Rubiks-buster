@@ -93,7 +93,7 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
         }
 
         for (; next < num_actions; next++){
-            solution_t *temp_solution = malloc(sizeof(solution_t) * MAX_SOLUTION_LENGTH);
+            solution_t *temp_solution = calloc(MAX_SOLUTION_LENGTH, sizeof(solution_t));
 
             MPI_Status status;
 
@@ -105,7 +105,8 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
 
 
             if (temp_solution->length < best_length){
-                memcpy(solution->steps, temp_solution, sizeof(rotate_action_t) * best_length);
+                memcpy(&solution->steps, &temp_solution->steps, sizeof(rotate_action_t) * best_length);
+                best_length = temp_solution->length;
                 solution->length = best_length;
             }
 
@@ -119,7 +120,8 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
             MPI_Recv(temp_solution, 1, solutionType, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &status);
 
             if (temp_solution->length < best_length) {
-                memcpy(solution->steps, temp_solution, sizeof(rotate_action_t) * best_length);
+                memcpy(solution->steps, temp_solution->steps, sizeof(rotate_action_t) * best_length);
+                best_length = temp_solution->length;
                 solution->length = best_length;
             }
             MPI_Send(NULL, 0, MPI_INT, status.MPI_SOURCE, 0, MPI_COMM_WORLD);
@@ -131,6 +133,7 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
     }
 
     else{
+        int local_best_length = MAX_SOLUTION_LENGTH;
         cube_t cube_local;
         MPI_Recv(&cube_local, SIDES * N * N, MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         cube_t cube_copy;// = malloc(sizeof(cube_t));
@@ -151,9 +154,9 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
 
         MPI_Get_count(&status, MPI_INT, &data_length);
         while(data_length > 0){
-            action_chain = parallelSolver((cube_t *) cube_copy, next_action, 0, &best_length);
+            action_chain = parallelSolver((cube_t *) cube_copy, next_action, 0, &local_best_length);
 
-            current_solution.length = best_length;
+            current_solution.length = local_best_length;
             memcpy(&current_solution.steps, &action_chain, sizeof(rotate_action_t) * best_length);
             free(action_chain);
 
