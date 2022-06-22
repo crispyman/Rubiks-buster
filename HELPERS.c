@@ -303,11 +303,9 @@ bool checkSolved(cube_t* cube) {
     }
     return true;
 }
-// Given a populated plane, rotate it 90% either clockwise or counter clockwise.
 
-
+// Print a flattened version of a NxN cube.
 void print_cube(cube_t* cube) {
-    printf("\n");
     // Print top.
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) printf(" ");

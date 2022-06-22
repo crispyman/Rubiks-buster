@@ -19,33 +19,35 @@ void scramble(cube_t* cube);
 
 
 int main(int argc, char * argv[]) {
-
-    //rotate_action_t * best_solution = malloc(sizeof(rotate_action_t) * MAX_SOLUTION_LENGTH);
+    // Set the random seed.
     srand(time(0));
+
+    // Initialize the cube.
     cube_t *my_cube = malloc(sizeof(cube_t));
     initialize(my_cube);
     verifyValid(my_cube);
-    printf("initialize produces valid output\n");
-
+    printf("Initialize produces valid output:\n");
     print_cube(my_cube);
-    printf("\n\n");
+    printf("\n");
 
+    // Scramble the cube.
     scramble(my_cube);
     verifyValid(my_cube);
-    printf("scramble produces valid output\n");
+    printf("Scramble produces valid output\n");
+    print_cube(my_cube);
+    printf("\n");
+
+    // Call the sequential solver on the scrambled cube.
     cube_t * seq_cube = malloc(sizeof(cube_t));
     memcpy(seq_cube, my_cube, sizeof(cube_t));
     solution_t * seq_solution = seqentialLauncher(seq_cube);
     if (seq_solution->steps){
         printf("Solved in: %d steps\n", seq_solution->length);
-    }
-    else
+    } else {
         printf("No Solution in %d steps\n", MAX_SOLUTION_LENGTH);
-
-
-
-
-    print_cube(my_cube);
+    }
+    
+    // Call the sequential solver on the scrambled cube.
 
     free(my_cube);
 }
