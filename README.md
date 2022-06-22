@@ -35,7 +35,7 @@ The sequential solution works by...
 
 ## Uncompleted Tasks (Time)
 
-1. Better loop prevention.
+1. Backtracking/loop prevention.
 2. Curses visualization.
 3. Non-square combination puzzles.
 
@@ -53,7 +53,8 @@ The sequential solution works by...
 | 06-21 | 3:00  | Created a stack for storing the actions taken and whether we are backtracking.            |
 | 06-21 | 2:00  | Created diagrams and started working on presentation.                                     |
 | 06-22 | 1:00  | Working on the ReadMe                                                                     |
-| Total | 15:50 |                                                                                           |
+| 06-22 | 1:20  | Debugged and added a timer to calculate speedup.                                          |
+| Total | 17:10 |                                                                                           |
 
 ### Andrew's Time
 
