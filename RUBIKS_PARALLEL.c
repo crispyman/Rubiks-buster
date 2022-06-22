@@ -25,6 +25,7 @@ MPI_Datatype solutionType;
 void parallelLauncher(cube_t* cube, solution_t * solution) {
     int myId;
     int numP;
+    solution->length = MAX_SOLUTION_LENGTH;
     int temp;
     //MPI_Init_thread(NULL, NULL, MPI_THREAD_MULTIPLE, &temp);
 
@@ -104,6 +105,7 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
 
 
 
+
             if (temp_solution->length < best_length){
                 memcpy(&solution->steps, &temp_solution->steps, sizeof(rotate_action_t) * best_length);
                 best_length = temp_solution->length;
@@ -124,6 +126,8 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
                 best_length = temp_solution->length;
                 solution->length = best_length;
             }
+            printf("%d %d\n", temp_solution->length, solution->length);
+
             MPI_Send(NULL, 0, MPI_INT, status.MPI_SOURCE, 0, MPI_COMM_WORLD);
 
             free(temp_solution);
@@ -168,6 +172,7 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
             //printf("data reciv %d\n", myId);
 
             MPI_Get_count(&status, MPI_INT, &data_length);
+
         }
 
     }
