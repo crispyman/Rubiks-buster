@@ -25,7 +25,7 @@ MPI_Datatype solutionType;
 void parallelLauncher(cube_t* cube, solution_t * solution) {
     int myId;
     int numP;
-    solution->length = MAX_SOLUTION_LENGTH;
+    solution->length = MAX_SOLUTION_LENGTH+1;
     int temp;
     //MPI_Init_thread(NULL, NULL, MPI_THREAD_MULTIPLE, &temp);
 
@@ -51,7 +51,7 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
 
 
     solution_t * best_solution = malloc(sizeof(solution_t) * MAX_SOLUTION_LENGTH);
-    int best_length = MAX_SOLUTION_LENGTH;
+    int best_length = MAX_SOLUTION_LENGTH+1;
 
     MPI_Comm_size(MPI_COMM_WORLD, &numP);
     MPI_Comm_rank(MPI_COMM_WORLD, &myId);
@@ -64,7 +64,6 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
         rotate_action_t actions[num_actions];
         int next = -1;
 
-        solution = calloc(1, sizeof(solution_t));
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < 3; j++) {
                 for (int k = 0; k < 2; k++) {
@@ -135,7 +134,7 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
     }
 
     else{
-        int local_best_length = MAX_SOLUTION_LENGTH;
+        int local_best_length = MAX_SOLUTION_LENGTH + 1;
         cube_t cube_local;
         MPI_Recv(&cube_local, SIDES * N * N, MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         cube_t cube_copy;// = malloc(sizeof(cube_t));
@@ -158,8 +157,11 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
         while(data_length > 0){
             action_chain = parallelSolver((cube_t *) cube_copy, next_action, 0, &local_best_length);
 
+
             current_solution.length = local_best_length;
-            memcpy(&current_solution.steps, &action_chain, sizeof(rotate_action_t) * best_length);
+            if (local_best_length < MAX_SOLUTION_LENGTH){
+                memcpy(&current_solution.steps, &action_chain, sizeof(rotate_action_t) * best_length);
+            }
             free(action_chain);
 
             //printf("presend b  %d\n", myId);
@@ -172,7 +174,6 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
             MPI_Get_count(&status, MPI_INT, &data_length);
 
         }
-
     }
 
 
@@ -198,7 +199,7 @@ rotate_action_t* parallelSolver(cube_t *cube, rotate_action_t action, int step, 
     }
     // if we find a solution
     if (checkSolved(cube)){
-        print_cube(cube);
+        //print_cube(cube);
         // check if it's shorter than current best
         if (step < *best_length) {
             rotate_action_t * solutions = calloc(step + 1, sizeof(rotate_action_t));

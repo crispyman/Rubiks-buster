@@ -46,8 +46,11 @@ int main(int argc, char * argv[]) {
         cube_t * seq_cube = malloc(sizeof(cube_t));
         memcpy(seq_cube, my_cube, sizeof(cube_t));
     solution_t * seq_solution = seqentialLauncher(my_cube);
-    if (seq_solution->length){
+    if (seq_solution->length <= MAX_SOLUTION_LENGTH){
         printf("Solved in: %d steps\n", seq_solution->length);
+        for (int i = 0; i < seq_solution->length; i++) {
+            printf("%d, %d, %d; ",seq_solution->steps[i].index, seq_solution->steps[i].a, seq_solution->steps[i].cc);
+        }
     }
     else
         printf("No Solution in %d steps\n", MAX_SOLUTION_LENGTH);
@@ -57,8 +60,11 @@ int main(int argc, char * argv[]) {
     parallelLauncher(my_cube, &parallel_solution);
 
     if (!myId) {
-        if (parallel_solution.length) {
+        if (parallel_solution.length <= MAX_SOLUTION_LENGTH) {
             printf("Solved in: %d steps\n", parallel_solution.length);
+            for (int i = 0; i < parallel_solution.length; i++) {
+                printf("%d, %d, %d; ",parallel_solution.steps[i].index, parallel_solution.steps[i].a, parallel_solution.steps[i].cc);
+            }
         } else
             printf("No Solution in %d steps\n", MAX_SOLUTION_LENGTH);
         print_cube(my_cube);
