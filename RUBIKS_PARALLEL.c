@@ -1,16 +1,16 @@
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "UnreachableCode"
+//#pragma clang diagnostic push
+//#pragma ide diagnostic ignored "UnreachableCode"
 //
 // Created by andrewiii on 6/15/22.
 //
 
+//#include <math.h>
 #include <stdio.h>
 #include <jerror.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
 #include<mpi/mpi.h>
-//#include <crt/math_functions.h>
 #include "HELPERS.h"
 #include "RUBIKS_PARALLEL.h"
 
@@ -22,9 +22,11 @@ MPI_Datatype solutionType;
 
 
 
-solution_t* parallelLauncher(cube_t* cube, solution_t * solution) {
+void parallelLauncher(cube_t* cube, solution_t * solution) {
     int myId;
     int numP;
+    MPI_Init(NULL, NULL);
+
 
 //    int blockLengths[2] = {1, 6 * N * N};
 //    MPI_Aint lb, extent;
@@ -76,7 +78,8 @@ solution_t* parallelLauncher(cube_t* cube, solution_t * solution) {
             }
         }
 
-        for (next = 0; next < min(numP, num_actions); next++){
+        for (next = 0; next < min(numP-1, num_actions); next++){
+            printf("data Sent/n");
             MPI_Send(&actions[next], 3, MPI_INT, next+1, 0, MPI_COMM_WORLD);
         }
 
@@ -86,7 +89,7 @@ solution_t* parallelLauncher(cube_t* cube, solution_t * solution) {
             MPI_Status status;
 
             MPI_Recv(temp_solution, 1, solutionType, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &status);
-            MPI_Send(&actions[next], 3, MPI_INT, next, 0, MPI_COMM_WORLD);
+            MPI_Send(&actions[next], 3, MPI_INT, next, status.MPI_SOURCE, MPI_COMM_WORLD);
 
 
             if (temp_solution->length < best_length){
@@ -98,13 +101,18 @@ solution_t* parallelLauncher(cube_t* cube, solution_t * solution) {
 
         for (int i = 0; i < numP; i++) {
             solution_t *temp_solution = malloc(sizeof(solution_t) * MAX_SOLUTION_LENGTH);
+            MPI_Status status;
 
 
-            MPI_Recv(temp_solution, 1, solutionType, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv(temp_solution, 1, solutionType, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &status);
+
             if (temp_solution->length < best_length) {
                 memcpy(solution->steps, temp_solution, sizeof(rotate_action_t) * best_length);
                 solution->length = best_length;
             }
+            MPI_Send(NULL, 0, MPI_INT, next, status.MPI_SOURCE, MPI_COMM_WORLD);
+
+            free(temp_solution);
         }
 
 
@@ -120,16 +128,24 @@ solution_t* parallelLauncher(cube_t* cube, solution_t * solution) {
 
         solution_t current_solution;
 
+        MPI_Status status;
+        int data_length;
 
-        MPI_Recv(&next_action, 3, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        action_chain = parallelSolver((cube_t *) cube_copy, next_action, 0, &best_length);
 
-        current_solution.length =best_length;
-        memcpy(current_solution.steps, action_chain, sizeof(rotate_action_t) * best_length);
-        free(action_chain);
+        MPI_Recv(&next_action, 3, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
+        MPI_Get_count(&status, MPI_INT, &data_length);
+        while(data_length > 0){
+            action_chain = parallelSolver((cube_t *) cube_copy, next_action, 0, &best_length);
 
-        MPI_Send(&current_solution, 1, solutionType, 0, 0, MPI_COMM_WORLD);
+            current_solution.length = best_length;
+            memcpy(&current_solution.steps, &action_chain, sizeof(rotate_action_t) * best_length);
+            free(action_chain);
 
+            MPI_Send(&current_solution, 1, solutionType, 0, 0, MPI_COMM_WORLD);
+
+            MPI_Recv(&next_action, 3, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
+            MPI_Get_count(&status, MPI_INT, &data_length);
+        }
 
     }
 
@@ -213,4 +229,4 @@ rotate_action_t* parallelSolver(cube_t *cube, rotate_action_t action, int step, 
 
 }
 
-#pragma clang diagnostic pop
+//#pragma clang diagnostic pop

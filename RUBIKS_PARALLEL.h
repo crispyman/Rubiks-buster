@@ -5,7 +5,7 @@
 #ifndef RUBIKS_BUSTER_RUBIKS_PARALLEL_H
 #define RUBIKS_BUSTER_RUBIKS_PARALLEL_H
 
-solution_t* parallelLauncher(cube_t* cube, solution_t * solution);
+void parallelLauncher(cube_t* cube, solution_t * solution);
 
 
 #endif //RUBIKS_BUSTER_RUBIKS_PARALLEL_H

@@ -12,6 +12,7 @@
 #include "RUBIKS.h"
 #include "HELPERS.h"
 #include "RUBIKS_SEQENTIAL.h"
+#include "RUBIKS_PARALLEL.h"
 
 // Proototypes.
 void initialize(cube_t* cube);
@@ -20,7 +21,6 @@ void scramble(cube_t* cube);
 
 int main(int argc, char * argv[]) {
 
-    MPI_Init(NULL, NULL);
 
     //rotate_action_t * best_solution = malloc(sizeof(rotate_action_t) * MAX_SOLUTION_LENGTH);
     srand(time(0));
@@ -35,14 +35,24 @@ int main(int argc, char * argv[]) {
     scramble(my_cube);
     verifyValid(my_cube);
     printf("scramble produces valid output\n");
-    cube_t * seq_cube = malloc(sizeof(cube_t));
-    memcpy(seq_cube, my_cube, sizeof(cube_t));
-    solution_t * seq_solution = seqentialLauncher(seq_cube);
-    if (seq_solution->steps){
-        printf("Solved in: %d steps\n", seq_solution->length);
+    //cube_t * seq_cube = malloc(sizeof(cube_t));
+    //memcpy(seq_cube, my_cube, sizeof(cube_t));
+//    solution_t * seq_solution = seqentialLauncher(my_cube);
+//    if (seq_solution->length){
+//        printf("Solved in: %d steps\n", seq_solution->length);
+//    }
+//    else
+//        printf("No Solution in %d steps\n", MAX_SOLUTION_LENGTH);
+
+    solution_t parallel_solution;
+    parallelLauncher(my_cube, &parallel_solution);
+
+    if (parallel_solution.length){
+        printf("Solved in: %d steps\n", parallel_solution.length);
     }
     else
         printf("No Solution in %d steps\n", MAX_SOLUTION_LENGTH);
+
 
 
 
