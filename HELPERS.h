@@ -32,10 +32,10 @@
     // N x N x 6 rubix cube definition definition.
     typedef color_t cube_t[SIDES][N][N];
 
-        typedef struct {
-            rotate_action_t * steps;
-            int length;
-        } solution_t;
+    typedef struct {
+        rotate_action_t * steps;
+        int length;
+    } solution_t;
 
     typedef struct {
         rotate_action_t steps[MAX_STACK_SIZE];

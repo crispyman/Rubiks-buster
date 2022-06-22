@@ -51,6 +51,12 @@ int main(int argc, char * argv[]) {
     solution_t* seq_solution = seqentialLauncher(seq_cube);
     t = clock() - t;
 
+    if (DEBUG) {
+        for (int i = 0; i < seq_solution->length; i++) {
+            printf("%d\t%d\t%d\n", seq_solution->steps[i].a, seq_solution->steps[i].index, seq_solution->steps[i].cc);
+        }
+    }
+    
     // Free the sequential copy of the cube.
     free(seq_cube);
 

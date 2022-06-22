@@ -12,16 +12,18 @@ The first step to representing a cube is to define an enumerated type of the 6 p
 
 Next, we need to figure out how to define a rotation that acts on our cube. These can be defined by three values: the axis of rotation, the index of the plane relative to that axis, and the direction of the rotation. With these three values, we defined functions to perform these rotations on the edges of the plane and if applicable, it's exterior face.
 
-Once we have a method for representing a Rubik's cube and any actions that can change it's state, we can develop our methods to, when provided a scrambled cube, find the fewest number of rotations to unscramble it.
+Once we have a method for representing a Rubik's cube and any actions that can change it's state, we can develop our methods to, when provided a scrambled cube, find the fewest number of rotations needed to unscramble it.
 
 The sequential solution works by...
 
 ## How to run
 
-### Dependencies
+The only dependency for this project is [Open MPI](https://www.open-mpi.org/) however, to avoid any other issues, it is recommended to run it on the App State MPI machine.
 
-1. [Open MPI](https://www.open-mpi.org/)
-2. []
+Steps:
+1. Clone the repository
+2. Run `make`
+3. Run `mpirun -np <processes> ./RUBIKS`
 
 ## Completed Tasks
 

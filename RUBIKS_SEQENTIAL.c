@@ -46,8 +46,7 @@ solution_t* seqentialLauncher(cube_t* cube) {
  * definitely longer than the best solution
  */
 void seqentialSolver(cube_t *cube, rotate_action_t action, int step) {
-
-
+    // Apply the rotation to the cube
     rotate(cube, action);
 
     // if debugging make sure each step results in valid output, NOTE: Probably very slow
@@ -93,12 +92,5 @@ void seqentialSolver(cube_t *cube, rotate_action_t action, int step) {
             }
         }
     }
-
-
-
-
-
-
-
 }
 
