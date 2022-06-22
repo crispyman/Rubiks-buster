@@ -39,7 +39,7 @@ int main(int argc, char * argv[]) {
     // Scramble the cube.
     scramble(my_cube);
     verifyValid(my_cube);
-    printf("Scramble produces valid output\n");
+    printf("Scramble produces valid output:\n");
     print_cube(my_cube);
     printf("\n");
 
@@ -58,13 +58,6 @@ int main(int argc, char * argv[]) {
     // Convert the time to seconds.
     seq_time = ((double)t) / CLOCKS_PER_SEC;
 
-    // Call the sequential solver on the scrambled cube.
-    if (seq_solution->steps) {
-        printf("Solved in: %d steps\n", seq_solution->length);
-    } else {
-        printf("No Solution in %d steps\n", MAX_SOLUTION_LENGTH);
-    }
-
     // Make a copy of the scrambled cube for the parallel version to work on.
     cube_t* para_cube = malloc(sizeof(cube_t));
     memcpy(para_cube, my_cube, sizeof(cube_t));
@@ -82,8 +75,8 @@ int main(int argc, char * argv[]) {
 
     double speedup = seq_time / para_time;
     printf("Sequential speed:\t%fs\n", seq_time);
-    printf("Parallel speed:\t%fs\n", para_time);
-    printf("Speedup:\t%fs\n", seq_time / para_time);
+    printf("Parallel speed:\t\t%fs\n", para_time);
+    printf("Speedup:\t\t%f\n", seq_time / para_time);
 
     // Free the original cube.
     free(my_cube);

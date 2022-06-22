@@ -61,7 +61,7 @@ void seqentialSolver(cube_t *cube, rotate_action_t action, int step) {
     memcpy(&current_solution[step], &action, sizeof(rotate_action_t));
     // if we find a solution
     if (checkSolved(cube)){
-        printf("Found Solution in %d steps\n", step + 1);
+        if (DEBUG) printf("Found Solution in %d steps\n", step + 1);
         // check if it's shorter than current best
         if (step+1 < best_length) {
             memcpy(best_solution, current_solution, sizeof(rotate_action_t) * (step + 1));
