@@ -1,32 +1,5 @@
 # Rubiks-buster
 
-## Time Log
-
-### Alex's Time
-
-| Date  | Hours | Notes                                                                                     |
-|-------|-------|-------------------------------------------------------------------------------------------|
-| 06-15 | 2:00  | Working on setting up the representation of the cube as well as the methods to rotate it. |
-| 06-16 | 1:30  | Working on implementing the rotate functions.                                             |
-| 06-16 | 2:00  | Working on the rotate functions.                                                          |
-| 06-16 | 1:20  | Worked on developing a naive display function.                                            |
-| 06-20 | 2:30  | Updated the display and rotate functions to work with the new indexing method.            |
-| 06-21 | 2:30  | Created a stack for storing the actions taken and whether we are backtracking.            |
-| 06-21 | 2:00  | Created diagrams and started working on presentation.                                     |
-| Total | 13:50 |                                                                                           |
-
-### Andrew's Time
-
-| Date  | Hours | Notes                                                                                                                             |
-|-------|-------|-----------------------------------------------------------------------------------------------------------------------------------|
-| 06-15 | 3:00  | Working on initialization and rotation methods created makefile                                                                   |
-| 06-16 | 3:00  | Wrote function to check if cube is solved, refactored code to use stuct to track movement                                         |
-| 06-17 | 3:00  | Rewrote scramble, Started work on RUBIKS_SEQENTIAL, started work on how to find identical rotations                               |
-| 06-19 | 6:00  | Rewrote scramble, Started rewriting cube implementation, It was a mess and broken, now it less of a mess and still broken         |
-| 06-19 | 4:00  | Spent 4 hours chasing down a bug that was an outdated pair initialization and verification functions... rotate now passes test... |
-| 06-20 | 4:00  | Implemented working recursive solution, reimplemented verifyValid again, added new solution type, added solution depth limit      |
-| Total | 23:00 |                                                                                                                                   |
-
 ## Description
 
 This goal of this project is to simulate and scramble an N × N × N Rubik's cube and compare the speed of both a sequential and parallel solution for finding the shortest series of rotations to solve the cube.
@@ -55,19 +28,50 @@ The sequential solution works by...
 1. Represent a Rubik's Cube
 2. Perform rotations on a Rubik's Cube
 3. Display a Rubik's Cube
-4. 
+4. Initialize and scramble a Rubik's Cube
+5. Sequentially unscramble a Rubik's Cube
 
 ## Uncompleted Tasks (Bugs)
 
 ## Uncompleted Tasks (Time)
 
+1. Better loop prevention.
+2. Curses visualization.
+3. Non-square combination puzzles.
 
+## Time Log
 
+### Alex's Time
 
--an explanation of how to compile and run the program (and what machine to run it on).  
-If your instructor doesn't have access to the machine then you should put screenshots of runs of
-your code in the respository.
--a list of what was completed
--a list of what didn't get completed because of bugs in the code
--a list of what didn't get completed due to lack of time (ideas for future work)
--a link to the presentation that you gave to the class (or put the actual presentation in the repository)
+| Date  | Hours | Notes                                                                                     |
+|-------|-------|-------------------------------------------------------------------------------------------|
+| 06-15 | 2:00  | Working on setting up the representation of the cube as well as the methods to rotate it. |
+| 06-16 | 1:30  | Working on implementing the rotate functions.                                             |
+| 06-16 | 2:00  | Working on the rotate functions.                                                          |
+| 06-16 | 1:20  | Worked on developing a naive display function.                                            |
+| 06-20 | 3:00  | Updated the display and rotate functions to work with the new indexing method.            |
+| 06-21 | 3:00  | Created a stack for storing the actions taken and whether we are backtracking.            |
+| 06-21 | 2:00  | Created diagrams and started working on presentation.                                     |
+| 06-22 | 1:00  | Working on the ReadMe                                                                     |
+| Total | 15:50 |                                                                                           |
+
+### Andrew's Time
+
+| Date  | Hours | Notes                                                                                                                             |
+|-------|-------|-----------------------------------------------------------------------------------------------------------------------------------|
+| 06-15 | 3:00  | Working on initialization and rotation methods created makefile                                                                   |
+| 06-16 | 3:00  | Wrote function to check if cube is solved, refactored code to use stuct to track movement                                         |
+| 06-17 | 3:00  | Rewrote scramble, Started work on RUBIKS_SEQENTIAL, started work on how to find identical rotations                               |
+| 06-19 | 6:00  | Rewrote scramble, Started rewriting cube implementation, It was a mess and broken, now it less of a mess and still broken         |
+| 06-19 | 4:00  | Spent 4 hours chasing down a bug that was an outdated pair initialization and verification functions... rotate now passes test... |
+| 06-20 | 4:00  | Implemented working recursive solution, reimplemented verifyValid again, added new solution type, added solution depth limit      |
+| Total | 23:00 |                                                                                                                                   |
+
+## Contributors
+
+- [Alex Clarke](https://github.com/alexpclarke)
+- [Andrew Pobrica](https://github.com/crispyman)
+
+## License
+
+[MIT](https://github.com/alexpclarke/Haskell-Turing-Machine/blob/master/LICENSE)
