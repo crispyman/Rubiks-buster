@@ -85,7 +85,7 @@ void seqentialSolver(cube_t* cube, rotate_action_t action, int step) {
         }
     }
     // If we just need to keep recursing
-    else if (step < best_length && step < MAX_SOLUTION_LENGTH) {
+    else if ((best_length == -1 || step < best_length) && step < MAX_SOLUTION_LENGTH) {
         // permute over all the states that lead away from here
         for (int i = 0; i < N; i++){
             for (int j = 0; j < 3; j++){
