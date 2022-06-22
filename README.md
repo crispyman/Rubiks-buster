@@ -1,6 +1,8 @@
 # Rubiks-buster
 
-## Alex's Time
+## Time Log
+
+### Alex's Time
 
 | Date  | Hours | Notes                                                                                     |
 |-------|-------|-------------------------------------------------------------------------------------------|
@@ -13,7 +15,7 @@
 | 06-21 | 2:00  | Created diagrams and started working on presentation.                                     |
 | Total | 13:50 |                                                                                           |
 
-## Andrew's Time
+### Andrew's Time
 
 | Date  | Hours | Notes                                                                                                                             |
 |-------|-------|-----------------------------------------------------------------------------------------------------------------------------------|
@@ -25,11 +27,43 @@
 | 06-20 | 4:00  | Implemented working recursive solution, reimplemented verifyValid again, added new solution type, added solution depth limit      |
 | Total | 23:00 |                                                                                                                                   |
 
+## Description
 
-Edit this README file so that it contains the following:
+This goal of this project is to simulate and scramble an N × N × N Rubik's cube and compare the speed of both a sequential and parallel solution for finding the shortest series of rotations to solve the cube.
 
--an indication of how much time you spent on the project (you should keep track of this as you go)
--a description of what the project does
+The first step to representing a cube is to define an enumerated type of the 6 possible colors. Each the 6 faces of the cube can be represented as an N × N array of these colors. The cube itself is then the collection of these six sides. They have been indexed according to the following diagrams:
+
+![3D Cube With Indexing](diagrams/index_3D.png)
+![Flattened Cube With Indexing](diagrams/index_flat.png)
+![Cube Array Representation](diagrams/index_array.png)
+
+Next, we need to figure out how to define a rotation that acts on our cube. These can be defined by three values: the axis of rotation, the index of the plane relative to that axis, and the direction of the rotation. With these three values, we defined functions to perform these rotations on the edges of the plane and if applicable, it's exterior face.
+
+Once we have a method for representing a Rubik's cube and any actions that can change it's state, we can develop our methods to, when provided a scrambled cube, find the fewest number of rotations to unscramble it.
+
+The sequential solution works by...
+
+## How to run
+
+### Dependencies
+
+1. [Open MPI](https://www.open-mpi.org/)
+2. []
+
+## Completed Tasks
+
+1. Represent a Rubik's Cube
+2. Perform rotations on a Rubik's Cube
+3. Display a Rubik's Cube
+4. 
+
+## Uncompleted Tasks (Bugs)
+
+## Uncompleted Tasks (Time)
+
+
+
+
 -an explanation of how to compile and run the program (and what machine to run it on).  
 If your instructor doesn't have access to the machine then you should put screenshots of runs of
 your code in the respository.
