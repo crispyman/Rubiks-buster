@@ -25,7 +25,8 @@ MPI_Datatype solutionType;
 void parallelLauncher(cube_t* cube, solution_t * solution) {
     int myId;
     int numP;
-    MPI_Init(NULL, NULL);
+    int temp;
+    //MPI_Init_thread(NULL, NULL, MPI_THREAD_MULTIPLE, &temp);
 
 
 //    int blockLengths[2] = {1, 6 * N * N};
@@ -54,6 +55,8 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
     MPI_Comm_size(MPI_COMM_WORLD, &numP);
     MPI_Comm_rank(MPI_COMM_WORLD, &myId);
 
+    printf("%d", myId);
+
     //solution_t *solution;
 
     if (!myId) {
@@ -77,9 +80,15 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
                 }
             }
         }
+        //printf("min:%d\n", min(numP-1, num_actions));
+
+        for (int i = 1; i < numP; i++){
+            //printf("data Sent %d\n", next+1);
+            MPI_Send(cube, SIDES * N * N, MPI_CHAR, i, 0, MPI_COMM_WORLD);
+        }
 
         for (next = 0; next < min(numP-1, num_actions); next++){
-            printf("data Sent/n");
+            //printf("data Sent %d\n", next+1);
             MPI_Send(&actions[next], 3, MPI_INT, next+1, 0, MPI_COMM_WORLD);
         }
 
@@ -89,7 +98,10 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
             MPI_Status status;
 
             MPI_Recv(temp_solution, 1, solutionType, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &status);
-            MPI_Send(&actions[next], 3, MPI_INT, next, status.MPI_SOURCE, MPI_COMM_WORLD);
+            //printf("send addr %d", status.MPI_SOURCE);
+            MPI_Send(&actions[next], 3, MPI_INT, status.MPI_SOURCE, 0, MPI_COMM_WORLD);
+            //printf("sent addr %d", status.MPI_SOURCE);
+
 
 
             if (temp_solution->length < best_length){
@@ -99,7 +111,7 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
 
         }
 
-        for (int i = 0; i < numP; i++) {
+        for (int i = 1; i < numP; i++) {
             solution_t *temp_solution = malloc(sizeof(solution_t) * MAX_SOLUTION_LENGTH);
             MPI_Status status;
 
@@ -110,7 +122,7 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
                 memcpy(solution->steps, temp_solution, sizeof(rotate_action_t) * best_length);
                 solution->length = best_length;
             }
-            MPI_Send(NULL, 0, MPI_INT, next, status.MPI_SOURCE, MPI_COMM_WORLD);
+            MPI_Send(NULL, 0, MPI_INT, status.MPI_SOURCE, 0, MPI_COMM_WORLD);
 
             free(temp_solution);
         }
@@ -119,8 +131,11 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
     }
 
     else{
+        cube_t cube_local;
+        MPI_Recv(&cube_local, SIDES * N * N, MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         cube_t cube_copy;// = malloc(sizeof(cube_t));
-        memcpy(&cube_copy, cube, sizeof(cube_t));
+
+        memcpy(&cube_copy, &cube_local, sizeof(cube_t));
 
         rotate_action_t next_action;
 
@@ -133,6 +148,7 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
 
 
         MPI_Recv(&next_action, 3, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
+
         MPI_Get_count(&status, MPI_INT, &data_length);
         while(data_length > 0){
             action_chain = parallelSolver((cube_t *) cube_copy, next_action, 0, &best_length);
@@ -141,16 +157,18 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
             memcpy(&current_solution.steps, &action_chain, sizeof(rotate_action_t) * best_length);
             free(action_chain);
 
+            //printf("presend b  %d\n", myId);
             MPI_Send(&current_solution, 1, solutionType, 0, 0, MPI_COMM_WORLD);
+            //printf("data send b %d\n", myId);
 
             MPI_Recv(&next_action, 3, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
+            //printf("data reciv %d\n", myId);
+
             MPI_Get_count(&status, MPI_INT, &data_length);
         }
 
     }
 
-
-    MPI_Finalize();
 
 
 }

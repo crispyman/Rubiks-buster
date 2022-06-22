@@ -20,23 +20,31 @@ void scramble(cube_t* cube);
 
 
 int main(int argc, char * argv[]) {
+    MPI_Init(NULL, NULL);
+    int myId;
+    int numP;
+    cube_t *my_cube;
+    solution_t parallel_solution;
 
 
-    //rotate_action_t * best_solution = malloc(sizeof(rotate_action_t) * MAX_SOLUTION_LENGTH);
-    srand(time(0));
-    cube_t *my_cube = malloc(sizeof(cube_t));
-    initialize(my_cube);
-    verifyValid(my_cube);
-    printf("initialize produces valid output\n");
+    //rotate_action_t * best_solution = malloc(sizeof(rotate_action_t) *
+    MPI_Comm_size(MPI_COMM_WORLD, &numP);
+    MPI_Comm_rank(MPI_COMM_WORLD, &myId);
+    if (!myId) {
+        srand(time(0));
+        my_cube = malloc(sizeof(cube_t));
+        initialize(my_cube);
+        verifyValid(my_cube);
+        printf("initialize produces valid output\n");
 
-    print_cube(my_cube);
-    printf("\n\n");
+        print_cube(my_cube);
+        printf("\n\n");
 
-    scramble(my_cube);
-    verifyValid(my_cube);
-    printf("scramble produces valid output\n");
-    //cube_t * seq_cube = malloc(sizeof(cube_t));
-    //memcpy(seq_cube, my_cube, sizeof(cube_t));
+        scramble(my_cube);
+        verifyValid(my_cube);
+        printf("scramble produces valid output\n");
+        //cube_t * seq_cube = malloc(sizeof(cube_t));
+        //memcpy(seq_cube, my_cube, sizeof(cube_t));
 //    solution_t * seq_solution = seqentialLauncher(my_cube);
 //    if (seq_solution->length){
 //        printf("Solved in: %d steps\n", seq_solution->length);
@@ -44,22 +52,30 @@ int main(int argc, char * argv[]) {
 //    else
 //        printf("No Solution in %d steps\n", MAX_SOLUTION_LENGTH);
 
-    solution_t parallel_solution;
+
+    }
     parallelLauncher(my_cube, &parallel_solution);
 
-    if (parallel_solution.length){
-        printf("Solved in: %d steps\n", parallel_solution.length);
+    if (!myId) {
+        if (parallel_solution.length) {
+            printf("Solved in: %d steps\n", parallel_solution.length);
+        } else
+            printf("No Solution in %d steps\n", MAX_SOLUTION_LENGTH);
+        print_cube(my_cube);
+
+        free(my_cube);
+
     }
-    else
-        printf("No Solution in %d steps\n", MAX_SOLUTION_LENGTH);
+
+
+    MPI_Finalize();
 
 
 
 
 
-    print_cube(my_cube);
 
-    free(my_cube);
+
 }
 
 // Initialize each of the 6 sides of the cube to the appropriate color.
