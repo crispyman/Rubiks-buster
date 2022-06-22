@@ -56,7 +56,8 @@ Steps:
 | 06-21 | 2:00  | Created diagrams and started working on presentation.                                     |
 | 06-22 | 1:00  | Working on the ReadMe                                                                     |
 | 06-22 | 1:20  | Debugged and added a timer to calculate speedup.                                          |
-| Total | 17:10 |                                                                                           |
+| 06-22 | 1:20  | Refactored and cleaned up code and added comments to explain the code better.             |
+| Total | 18:30 |                                                                                           |
 
 ### Andrew's Time
 
