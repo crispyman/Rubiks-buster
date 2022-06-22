@@ -14,14 +14,12 @@
 #include "HELPERS.h"
 #include "RUBIKS_SEQENTIAL.h"
 
-// Proototypes.
+// Prototypes.
 void initialize(cube_t* cube);
 void scramble(cube_t* cube);
 
 
 int main(int argc, char * argv[]) {
-    double seq_time, para_time;
-
     // Set the random seed.
     srand(time(0));
 
@@ -43,9 +41,10 @@ int main(int argc, char * argv[]) {
     print_cube(my_cube);
     printf("\n");
 
-    // Make a copy of the scrambled cube for the sequential version to work on.
+    // Make two copies of the cube, one for each solution to work on.
     cube_t* seq_cube = malloc(sizeof(cube_t));
     memcpy(seq_cube, my_cube, sizeof(cube_t));
+    cube_t* para_cube = my_cube;
 
     // Run the sequential solver and time its execution.
     t = clock();
@@ -55,31 +54,23 @@ int main(int argc, char * argv[]) {
     // Free the sequential copy of the cube.
     free(seq_cube);
 
-    // Convert the time to seconds.
-    seq_time = ((double)t) / CLOCKS_PER_SEC;
-
-    // Make a copy of the scrambled cube for the parallel version to work on.
-    cube_t* para_cube = malloc(sizeof(cube_t));
-    memcpy(para_cube, my_cube, sizeof(cube_t));
+    // Convert the sequential time to seconds.
+    double seq_time = ((double)t) / CLOCKS_PER_SEC;
 
     // Run the parallel solver and time its execution.
     t = clock();
     // PLACE CALL TO PARALLEL HERE
     t = clock() - t;
 
-    // Free the sequential copy of the cube.
+    // Free the parallel copy of the cube.
     free(para_cube);
 
-    // Convert the time to seconds.
-    para_time = ((double)t) / CLOCKS_PER_SEC;
+    // Convert the parallel time to seconds.
+    double para_time = ((double)t) / CLOCKS_PER_SEC;
 
-    double speedup = seq_time / para_time;
     printf("Sequential speed:\t%fs\n", seq_time);
     printf("Parallel speed:\t\t%fs\n", para_time);
     printf("Speedup:\t\t%f\n", seq_time / para_time);
-
-    // Free the original cube.
-    free(my_cube);
 }
 
 // Initialize each of the 6 sides of the cube to the appropriate color.
