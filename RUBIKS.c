@@ -51,6 +51,13 @@ int main(int argc, char * argv[]) {
     solution_t* seq_solution = seqentialLauncher(seq_cube);
     t = clock() - t;
 
+    // Print whether it was successfully solved.
+    if (seq_solution->length == -1) {
+        printf("Sequential solver failed to solve the cube in %d steps\n", MAX_SOLUTION_LENGTH);
+    } else {
+        printf("Sequential solver solved the cube in %d steps\n", seq_solution->length);
+    }
+
     if (DEBUG) {
         for (int i = 0; i < seq_solution->length; i++) {
             printf("%d\t%d\t%d\n", seq_solution->steps[i].a, seq_solution->steps[i].index, seq_solution->steps[i].cc);
@@ -67,6 +74,14 @@ int main(int argc, char * argv[]) {
     t = clock();
     // PLACE CALL TO PARALLEL HERE
     t = clock() - t;
+
+    // Print whether it was successfully solved.
+    if (seq_solution->length == -1) {
+        printf("Parallel solver failed to solve the cube in %d steps\n", MAX_SOLUTION_LENGTH);
+    } else {
+        // printf("Parallel solver solved the cube in %d steps\n", para_solution->length);
+        printf("Parallel solver solved the cube in __ steps\n");
+    }
 
     // Free the parallel copy of the cube.
     free(para_cube);

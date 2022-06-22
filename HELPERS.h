@@ -6,7 +6,7 @@
     #define N 3
     #define DEBUG 0
     #define N_SCRAMBLES 6
-    #define MAX_SOLUTION_LENGTH 5
+    #define MAX_SOLUTION_LENGTH 6
     #define MAX_STACK_SIZE 20
 
     /* ----- Type Definitions ----- */

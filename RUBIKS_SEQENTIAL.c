@@ -13,9 +13,9 @@
 
 int best_length = -1;
 
-rotate_action_t best_solution[MAX_SOLUTION_LENGTH + 1] = {0};
+rotate_action_t best_solution[MAX_SOLUTION_LENGTH] = {0};
 
-rotate_action_t current_solution[MAX_SOLUTION_LENGTH + 1] = {0};
+rotate_action_t current_solution[MAX_SOLUTION_LENGTH] = {0};
 
 solution_t* seqentialLauncher(cube_t* cube) {
     // Initialize a solution.
