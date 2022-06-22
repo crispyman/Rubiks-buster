@@ -56,8 +56,6 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
     MPI_Comm_size(MPI_COMM_WORLD, &numP);
     MPI_Comm_rank(MPI_COMM_WORLD, &myId);
 
-    printf("%d", myId);
-
     //solution_t *solution;
 
     if (!myId) {

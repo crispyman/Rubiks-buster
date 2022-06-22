@@ -43,14 +43,14 @@ int main(int argc, char * argv[]) {
         scramble(my_cube);
         verifyValid(my_cube);
         printf("scramble produces valid output\n");
-        //cube_t * seq_cube = malloc(sizeof(cube_t));
-        //memcpy(seq_cube, my_cube, sizeof(cube_t));
-//    solution_t * seq_solution = seqentialLauncher(my_cube);
-//    if (seq_solution->length){
-//        printf("Solved in: %d steps\n", seq_solution->length);
-//    }
-//    else
-//        printf("No Solution in %d steps\n", MAX_SOLUTION_LENGTH);
+        cube_t * seq_cube = malloc(sizeof(cube_t));
+        memcpy(seq_cube, my_cube, sizeof(cube_t));
+    solution_t * seq_solution = seqentialLauncher(my_cube);
+    if (seq_solution->length){
+        printf("Solved in: %d steps\n", seq_solution->length);
+    }
+    else
+        printf("No Solution in %d steps\n", MAX_SOLUTION_LENGTH);
 
 
     }
