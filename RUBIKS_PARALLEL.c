@@ -99,8 +99,8 @@ void parallelLauncher(cube_t* cube, solution_p_t * solution) {
             printf("GUARD\n %d \nGUARD\n", temp_solution.length);
 
 
-            if (temp_solution.length < best_length) {
-                memcpy(solution->steps, temp_solution.steps, sizeof(rotate_action_t) * temp_solution.length);
+            if (temp_solution.length < best_length && temp_solution.length > 0){
+                memcpy(&solution->steps, &temp_solution.steps, sizeof(rotate_action_t) *  temp_solution.length);
                 best_length = temp_solution.length;
                 solution->length = best_length;
             }
