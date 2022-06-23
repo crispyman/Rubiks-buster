@@ -214,7 +214,7 @@ rotate_action_t* parallelSolver(cube_t *cube, rotate_action_t action, int step, 
             return NULL;
     }
         // we recurse to far, turn back, there be dragons (unallocated memory)
-    else if (step >= *best_length)
+    else if (step > *best_length)
         return NULL;
         // If we just need to keep recursing
     else {
