@@ -2,10 +2,8 @@
 #define RUBIKS_BUSTER_HELPERS_H
     #include <stdbool.h>
 
-#define min(a,b) \
-   ({ __typeof__ (a) _a = (a); \
-       __typeof__ (b) _b = (b); \
-     _a < _b ? _a : _b; })
+    #define min(a,b) \
+    ({ __typeof__ (a) _a = (a); __typeof__ (b) _b = (b); _a < _b ? _a : _b; })
 
     #define SIDES 6
     #define N 3

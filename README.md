@@ -14,7 +14,9 @@ Next, we need to figure out how to define a rotation that acts on our cube. Thes
 
 Once we have a method for representing a Rubik's cube and any actions that can change it's state, we can develop our methods to, when provided a scrambled cube, find the fewest number of rotations needed to unscramble it.
 
-The sequential solution works by...
+The sequential solution works by performing a recursive depth first search, trying every possible combination of actions and keeping track of the best one that has been founnd thus far. The depth of the recursion is limited by both the pre-defined maximum of 20 or the length of the current best solution. 20 is chosed as the maximum thanks to the fact that any 3x3 rubiks cube may be solved in 20 or less moves ([source](https://www.cube20.org/)). Once every solution has been checked, the shortest series of actions required to unscramble the cube is returned.
+
+The parallel version works in a similar manner to the sequential one however it uses MPI to .
 
 ## How to run
 
@@ -32,6 +34,7 @@ Steps:
 3. Display a Rubik's Cube
 4. Initialize and scramble a Rubik's Cube
 5. Sequentially unscramble a Rubik's Cube
+6. Unscramble a Rubik's Cube using MPI
 
 ## Uncompleted Tasks (Bugs)
 

@@ -19,6 +19,7 @@
 void initialize(cube_t* cube);
 void scramble(cube_t* cube);
 
+char axis_char[3] = {'X', 'Y', 'Z'};
 
 int main(int argc, char * argv[]) {
     // Initialize MPI.
@@ -28,7 +29,7 @@ int main(int argc, char * argv[]) {
     int myId;
     int numP;
     cube_t *my_cube;
-    solution_t parallel_solution;
+    solution_t para_solution;
     double seq_time;
     double para_time;
 
@@ -74,7 +75,14 @@ int main(int argc, char * argv[]) {
         if (seq_solution->length == -1) {
             printf("Seqential solver failed to solve the cube in %d steps\n", MAX_SOLUTION_LENGTH);
         } else {
-            printf("Sequential solver solved the cube in %d steps\n", seq_solution->length);
+            printf("Sequential solver solved the cube in %d steps:\n", seq_solution->length);
+            printf("STEP\tAXIS\tINDEX\tDIRECTION\n");
+            for (int i = 0; i < seq_solution->length; i++) {
+                printf("%d\t", i);
+                printf("%c\t", axis_char[seq_solution->steps[i].a]);
+                printf("%d\t", seq_solution->steps[i].index);
+                printf("%s\n", seq_solution->steps[i].cc ? "cc" : "c");
+            }
         }
 
         // Free the original cube.
@@ -89,7 +97,7 @@ int main(int argc, char * argv[]) {
 
     // Run and time the parallel solution.
     if (!myId) t = clock();
-    parallelLauncher(my_cube, &parallel_solution);
+    parallelLauncher(my_cube, &para_solution);
     MPI_Barrier(MPI_COMM_WORLD);
     if(!myId) t = clock() - t;
 
@@ -98,10 +106,17 @@ int main(int argc, char * argv[]) {
         para_time = ((double)t) / CLOCKS_PER_SEC;
 
         // Print whether it was successfully solved.
-        if (parallel_solution.length <= MAX_SOLUTION_LENGTH) {
-            printf("Parallel solver solved the cube in %d steps\n", parallel_solution.length);
+        if (para_solution.length <= MAX_SOLUTION_LENGTH) {
+            printf("Parallel solver solved the cube in %d steps\n", para_solution.length);
         } else {
             printf("Parallel solver failed to solve the cube in %d steps\n", MAX_SOLUTION_LENGTH);
+            printf("STEP\tAXIS\tINDEX\tDIRECTION\n");
+            for (int i = 0; i < para_solution.length; i++) {
+                printf("%d\t", i);
+                printf("%c\t", axis_char[para_solution.steps[i].a]);
+                printf("%d\t", para_solution.steps[i].index);
+                printf("%s\n", para_solution.steps[i].cc ? "cc" : "c");
+            }
         }
 
         // Print speeds and speedup.
