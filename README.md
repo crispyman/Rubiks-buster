@@ -41,8 +41,10 @@ Steps:
 ## Uncompleted Tasks (Time)
 
 1. Backtracking/loop prevention.
-2. Curses visualization.
-3. Non-square combination puzzles.
+2. Command line arguments.
+3. Curses visualization.
+4. Non-square combination puzzles.
+
 
 ## Time Log
 
@@ -60,7 +62,8 @@ Steps:
 | 06-22 | 1:00  | Working on the ReadMe                                                                     |
 | 06-22 | 1:20  | Debugged and added a timer to calculate speedup.                                          |
 | 06-22 | 1:20  | Refactored and cleaned up code and added comments to explain the code better.             |
-| Total | 18:30 |                                                                                           |
+| 06-23 | 1:35  | Cleaned up the main and worked on readme/slides                                           |
+| Total | 20:05 |                                                                                           |
 
 ### Andrew's Time
 
