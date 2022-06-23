@@ -14,11 +14,13 @@ MPI_Datatype solutionType;
 
 
 
-void parallelLauncher(cube_t* cube, solution_t * solution) {
+void parallelLauncher(cube_t* cube, solution_p_t * solution) {
     int myId;
     int numP;
     solution->length = MAX_SOLUTION_LENGTH+1;
 
+
+    // Struct for sending the solution back to the master proccess
     int blockLengthsSolution[2] = {1, 6 * N * N};
     MPI_Aint lbSolution, extentSolution;
     MPI_Type_get_extent(MPI_INT, &lbSolution, &extentSolution);
@@ -70,44 +72,44 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
         }
 
         for (; next < num_actions; next++){
-            solution_t *temp_solution = calloc(MAX_SOLUTION_LENGTH, sizeof(solution_t));
+            solution_p_t temp_solution;// = calloc(MAX_SOLUTION_LENGTH, sizeof(solution_t));
 
             MPI_Status status;
 
-            MPI_Recv(temp_solution, 1, solutionType, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &status);
+            MPI_Recv(&temp_solution, 1, solutionType, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &status);
             //printf("send addr %d", status.MPI_SOURCE);
             MPI_Send(&actions[next], 3, MPI_INT, status.MPI_SOURCE, 0, MPI_COMM_WORLD);
             //printf("sent addr %d", status.MPI_SOURCE);
 
 
 
-            if (temp_solution->length < best_length){
-                memcpy(&solution->steps, &temp_solution->steps, sizeof(rotate_action_t) *  temp_solution->length);
-                best_length = temp_solution->length;
+            if (temp_solution.length < best_length){
+                memcpy(&solution->steps, &temp_solution.steps, sizeof(rotate_action_t) *  temp_solution.length);
+                best_length = temp_solution.length;
                 solution->length = best_length;
             }
 
         }
 
         for (int i = 1; i < numP; i++) {
-            solution_t *temp_solution = malloc(sizeof(solution_t) * MAX_SOLUTION_LENGTH);
+            solution_p_t temp_solution;
+            temp_solution.length = MAX_SOLUTION_LENGTH+1;
             MPI_Status status;
 
 
-            MPI_Recv(temp_solution, 1, solutionType, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &status);
-            printf("GUARD\n %d \nGUARD\n", temp_solution->length);
+            MPI_Recv(&temp_solution, 1, solutionType, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &status);
+            printf("GUARD\n %d \nGUARD\n", temp_solution.length);
 
 
-            if (temp_solution->length < best_length) {
-                memcpy(solution->steps, temp_solution->steps, sizeof(rotate_action_t) * temp_solution->length);
-                best_length = temp_solution->length;
+            if (temp_solution.length < best_length) {
+                memcpy(solution->steps, temp_solution.steps, sizeof(rotate_action_t) * temp_solution.length);
+                best_length = temp_solution.length;
                 solution->length = best_length;
             }
             //printf("%d %d\n", temp_solution->length, solution->length);
 
             MPI_Send(NULL, 0, MPI_INT, status.MPI_SOURCE, 0, MPI_COMM_WORLD);
 
-            free(temp_solution);
         }
 
 

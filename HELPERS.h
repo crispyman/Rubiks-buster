@@ -9,7 +9,7 @@
     #define N 3
     #define DEBUG 0
     #define N_SCRAMBLES 4
-    #define MAX_SOLUTION_LENGTH 20
+    #define MAX_SOLUTION_LENGTH 5
     #define MAX_STACK_SIZE 20
 
     /* ----- Type Definitions ----- */
@@ -35,6 +35,11 @@
         rotate_action_t * steps;
         int length;
     } solution_t;
+
+    typedef struct {
+        rotate_action_t steps[MAX_SOLUTION_LENGTH];
+        int length;
+    } solution_p_t;
 
     typedef struct {
         rotate_action_t steps[MAX_STACK_SIZE];
