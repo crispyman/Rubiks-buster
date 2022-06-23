@@ -96,7 +96,7 @@ void parallelLauncher(cube_t* cube, solution_p_t * solution) {
 
 
             MPI_Recv(&temp_solution, 1, solutionType, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &status);
-            printf("GUARD\n %d \nGUARD\n", temp_solution.length);
+            //printf("GUARD\n %d \nGUARD\n", temp_solution.length);
 
 
             if (temp_solution.length < best_length && temp_solution.length > 0){
@@ -137,7 +137,7 @@ void parallelLauncher(cube_t* cube, solution_p_t * solution) {
         while(data_length > 0){
             action_chain = parallelSolver((cube_t *) cube_copy, next_action, 0, &local_best_length);
 
-            printf("GUARD\n %d \nGUARD\n", local_best_length);
+            //printf("GUARD\n %d \nGUARD\n", local_best_length);
 
 
 
@@ -190,7 +190,7 @@ rotate_action_t* parallelSolver(cube_t *cube, rotate_action_t action, int step, 
 
     else if (checkSolved(cube)) {
 
-        printf("step: %d+1, %d\n", step, *best_length);
+        //printf("step: %d+1, %d\n", step, *best_length);
 
 
         //print_cube(cube);
