@@ -59,7 +59,7 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
     //solution_t *solution;
 
     if (!myId) {
-        printf("Number of processes: %d\n", numP);
+        //printf("Number of processes: %d\n", numP);
         int num_actions = N * 3 * 2;
         rotate_action_t actions[num_actions];
         int next = -1;
@@ -123,7 +123,7 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
                 best_length = temp_solution->length;
                 solution->length = best_length;
             }
-            printf("%d %d\n", temp_solution->length, solution->length);
+            //printf("%d %d\n", temp_solution->length, solution->length);
 
             MPI_Send(NULL, 0, MPI_INT, status.MPI_SOURCE, 0, MPI_COMM_WORLD);
 
