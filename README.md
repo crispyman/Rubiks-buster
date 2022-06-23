@@ -16,7 +16,7 @@ Once we have a method for representing a Rubik's cube and any actions that can c
 
 The sequential solution works by performing a recursive depth first search, trying every possible combination of actions and keeping track of the best one that has been founnd thus far. The depth of the recursion is limited by both the pre-defined maximum of 20 or the length of the current best solution. 20 is chosed as the maximum thanks to the fact that any 3x3 rubiks cube may be solved in 20 or less moves ([source](https://www.cube20.org/)). Once every solution has been checked, the shortest series of actions required to unscramble the cube is returned.
 
-The parallel version works in a similar manner to the sequential one however it uses MPI to .
+The parallel version works in a similar manner to the sequential one however it uses MPI to break it up across multiple processes.
 
 ## How to run
 
@@ -44,7 +44,8 @@ Steps:
 2. Command line arguments.
 3. Curses visualization.
 4. Non-square combination puzzles.
-
+5. Non-recursive solution for both single core and parallelized.
+6. Dynamic parallelism with smaller jobs.
 
 ## Time Log
 
@@ -63,7 +64,8 @@ Steps:
 | 06-22 | 1:20  | Debugged and added a timer to calculate speedup.                                          |
 | 06-22 | 1:20  | Refactored and cleaned up code and added comments to explain the code better.             |
 | 06-23 | 1:35  | Cleaned up the main and worked on readme/slides                                           |
-| Total | 20:05 |                                                                                           |
+| 06-23 | 1:15  | Debugging problem with parallel solution and finalizing readme/slides                     |
+| Total | 21:20 |                                                                                           |
 
 ### Andrew's Time
 
