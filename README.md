@@ -61,15 +61,17 @@ Steps:
 
 ### Andrew's Time
 
-| Date  | Hours | Notes                                                                                                                             |
-|-------|-------|-----------------------------------------------------------------------------------------------------------------------------------|
-| 06-15 | 3:00  | Working on initialization and rotation methods created makefile                                                                   |
-| 06-16 | 3:00  | Wrote function to check if cube is solved, refactored code to use stuct to track movement                                         |
-| 06-17 | 3:00  | Rewrote scramble, Started work on RUBIKS_SEQENTIAL, started work on how to find identical rotations                               |
-| 06-19 | 6:00  | Rewrote scramble, Started rewriting cube implementation, It was a mess and broken, now it less of a mess and still broken         |
-| 06-19 | 4:00  | Spent 4 hours chasing down a bug that was an outdated pair initialization and verification functions... rotate now passes test... |
-| 06-20 | 4:00  | Implemented working recursive solution, reimplemented verifyValid again, added new solution type, added solution depth limit      |
-| Total | 23:00 |                                                                                                                                   |
+| Date  | Hours | Notes                                                                                                                              |
+|-------|-------|------------------------------------------------------------------------------------------------------------------------------------|
+| 06-15 | 3:00  | Working on initialization and rotation methods created makefile                                                                    |
+| 06-16 | 3:00  | Wrote function to check if cube is solved, refactored code to use stuct to track movement                                          |
+| 06-17 | 3:00  | Rewrote scramble, Started work on RUBIKS_SEQENTIAL, started work on how to find identical rotations                                |
+| 06-19 | 6:00  | Rewrote scramble, Started rewriting cube implementation, It was a mess and broken, now it less of a mess and still broken          |
+| 06-19 | 4:00  | Spent 4 hours chasing down a bug that was an outdated pair initialization and verification functions... rotate now passes test...  |
+| 06-20 | 4:00  | Implemented working recursive solution, reimplemented verifyValid again, added new solution type, added solution depth limit       |
+| 06-21 | 4:00  | Started on parallel solution, rewrote parts of sequential version to use an array instead of recursively returning malloced memory |
+| 06-22 | 8:00  | "Finished implementing Parallel solution with, fixed so many bugs                                                                  |
+| Total | 35:00 |                                                                                                                                    |
 
 ## Contributors
 
