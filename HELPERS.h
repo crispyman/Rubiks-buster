@@ -37,8 +37,8 @@
     } solution_t;
 
     typedef struct {
-        rotate_action_t steps[MAX_SOLUTION_LENGTH];
         int length;
+        rotate_action_t steps[MAX_SOLUTION_LENGTH];
     } solution_p_t;
 
     typedef struct {

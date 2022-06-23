@@ -20,7 +20,7 @@ void parallelLauncher(cube_t* cube, solution_p_t * solution) {
     solution->length = MAX_SOLUTION_LENGTH+1;
 
 
-    // Struct for sending the solution back to the master proccess
+    // Struct for sending the solution back to proccess 0
     int blockLengthsSolution[2] = {1, 6 * N * N};
     MPI_Aint lbSolution, extentSolution;
     MPI_Type_get_extent(MPI_INT, &lbSolution, &extentSolution);
@@ -37,14 +37,13 @@ void parallelLauncher(cube_t* cube, solution_p_t * solution) {
     MPI_Comm_size(MPI_COMM_WORLD, &numP);
     MPI_Comm_rank(MPI_COMM_WORLD, &myId);
 
-    //solution_t *solution;
-
+    // proc 0 setup
     if (!myId) {
         //printf("Number of processes: %d\n", numP);
         int num_actions = N * 3 * 2;
         rotate_action_t actions[num_actions];
         int next = -1;
-
+        // Generates all the launch actions ahead of time
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < 3; j++) {
                 for (int k = 0; k < 2; k++) {
@@ -54,23 +53,22 @@ void parallelLauncher(cube_t* cube, solution_p_t * solution) {
                     new_action.cc = k;
 
                     memcpy(&actions[++next], &new_action, sizeof(rotate_action_t));
-
-
                 }
             }
         }
-        //printf("min:%d\n", min(numP-1, num_actions));
-
+        // sends Cube to processes
         for (int i = 1; i < numP; i++){
             //printf("data Sent %d\n", next+1);
             MPI_Send(cube, SIDES * N * N, MPI_CHAR, i, 0, MPI_COMM_WORLD);
         }
 
+        // sends first batch of starting positions out
         for (next = 0; next < min(numP-1, num_actions); next++){
             //printf("data Sent %d\n", next+1);
             MPI_Send(&actions[next], 3, MPI_INT, next+1, 0, MPI_COMM_WORLD);
         }
 
+        // reads data and sends remaining jobs out
         for (; next < num_actions; next++){
             solution_p_t temp_solution;// = calloc(MAX_SOLUTION_LENGTH, sizeof(solution_t));
 
@@ -82,8 +80,7 @@ void parallelLauncher(cube_t* cube, solution_p_t * solution) {
             //printf("sent addr %d", status.MPI_SOURCE);
 
 
-
-            if (temp_solution.length < best_length){
+            if (temp_solution.length < best_length && temp_solution.length > 0){
                 memcpy(&solution->steps, &temp_solution.steps, sizeof(rotate_action_t) *  temp_solution.length);
                 best_length = temp_solution.length;
                 solution->length = best_length;
@@ -91,6 +88,7 @@ void parallelLauncher(cube_t* cube, solution_p_t * solution) {
 
         }
 
+        // recieves remaining data and tells processes to terminate
         for (int i = 1; i < numP; i++) {
             solution_p_t temp_solution;
             temp_solution.length = MAX_SOLUTION_LENGTH+1;
@@ -106,7 +104,6 @@ void parallelLauncher(cube_t* cube, solution_p_t * solution) {
                 best_length = temp_solution.length;
                 solution->length = best_length;
             }
-            //printf("%d %d\n", temp_solution->length, solution->length);
 
             MPI_Send(NULL, 0, MPI_INT, status.MPI_SOURCE, 0, MPI_COMM_WORLD);
 
@@ -114,12 +111,13 @@ void parallelLauncher(cube_t* cube, solution_p_t * solution) {
 
 
     }
-
+    // child process work
     else{
         int local_best_length = MAX_SOLUTION_LENGTH + 1;
         cube_t cube_local;
+        // get start cube
         MPI_Recv(&cube_local, SIDES * N * N, MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        cube_t cube_copy;// = malloc(sizeof(cube_t));
+        cube_t cube_copy;
 
         memcpy(&cube_copy, &cube_local, sizeof(cube_t));
 
@@ -132,7 +130,7 @@ void parallelLauncher(cube_t* cube, solution_p_t * solution) {
         MPI_Status status;
         int data_length;
 
-
+        // get first instruction
         MPI_Recv(&next_action, 3, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
 
         MPI_Get_count(&status, MPI_INT, &data_length);
@@ -143,19 +141,23 @@ void parallelLauncher(cube_t* cube, solution_p_t * solution) {
 
 
 
-            current_solution.length = local_best_length;
+
+            // if new solution better than local best replace local best
             if (local_best_length < MAX_SOLUTION_LENGTH+1){
+                current_solution.length = local_best_length;
                 memcpy(&current_solution.steps, &action_chain, sizeof(rotate_action_t) * (local_best_length));
             }
             free(action_chain);
 
-            //printf("presend b  %d\n", myId);
+
+            // send solution
             MPI_Send(&current_solution, 1, solutionType, 0, 0, MPI_COMM_WORLD);
             //printf("data send b %d\n", myId);
 
+            //recv next instruction or terminate command
             MPI_Recv(&next_action, 3, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
-            //printf("data reciv %d\n", myId);
 
+            // if size 0 message terminate
             MPI_Get_count(&status, MPI_INT, &data_length);
 
         }
