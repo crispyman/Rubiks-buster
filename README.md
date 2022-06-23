@@ -1,5 +1,9 @@
 # Rubiks-buster
 
+## Slides
+[SLIDES](https://docs.google.com/presentation/d/1aKISeeTH1_uGJaxksP1mraydAHvfZDd5-ycriObTSmM/edit?usp=sharing)
+
+
 ## Description
 
 This goal of this project is to simulate and scramble an N × N × N Rubik's cube and compare the speed of both a sequential and parallel solution for finding the shortest series of rotations to solve the cube.
@@ -47,6 +51,7 @@ Steps:
 5. Non-recursive solution for both single core and parallelized.
 6. Dynamic parallelism with smaller jobs.
 
+
 ## Time Log
 
 ### Alex's Time
@@ -78,7 +83,8 @@ Steps:
 | 06-19 | 4:00  | Spent 4 hours chasing down a bug that was an outdated pair initialization and verification functions... rotate now passes test...  |
 | 06-20 | 4:00  | Implemented working recursive solution, reimplemented verifyValid again, added new solution type, added solution depth limit       |
 | 06-21 | 4:00  | Started on parallel solution, rewrote parts of sequential version to use an array instead of recursively returning malloced memory |
-| 06-22 | 8:00  | "Finished implementing Parallel solution with, fixed so many bugs                                                                  |
+| 06-22 | 8:00  | Finished implementing Parallel solution with, fixed so many bugs                                                                   |
+| 06-23 | 5:00  | Spent all my time debugging parrallel and fixing timing                                                                            |
 | Total | 35:00 |                                                                                                                                    |
 
 ## Contributors
