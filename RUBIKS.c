@@ -30,8 +30,8 @@ int main(int argc, char * argv[]) {
     int numP;
     cube_t *my_cube;
     solution_t para_solution;
-    double seq_time;
-    double para_time;
+    double seq_time = 0;
+    double para_time = 0;
 
     // Define the timer.
     clock_t t = 0;
@@ -45,6 +45,7 @@ int main(int argc, char * argv[]) {
         srand(time(0));
 
         // Initialize the cube.
+        printf("Initializing a %d × %d cube...\n", N, N);
         my_cube = malloc(sizeof(cube_t));
         initialize(my_cube);
         verifyValid(my_cube);
@@ -53,9 +54,10 @@ int main(int argc, char * argv[]) {
         printf("\n");
 
         // Scramble the cube.
+        printf("Performing %d random rotations on the cube...\n", N_SCRAMBLES);
         scramble(my_cube);
         verifyValid(my_cube);
-        printf("scramble produces valid output:\n");
+        printf("Scramble produces valid output:\n");
         print_cube(my_cube);
         printf("\n");
 
