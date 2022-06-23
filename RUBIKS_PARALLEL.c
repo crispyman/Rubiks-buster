@@ -1,10 +1,3 @@
-//#pragma clang diagnostic push
-//#pragma ide diagnostic ignored "UnreachableCode"
-//
-// Created by andrewiii on 6/15/22.
-//
-
-//#include <math.h>
 #include <stdio.h>
 #include <jerror.h>
 #include <unistd.h>
@@ -16,7 +9,6 @@
 
 rotate_action_t* parallelSolver(cube_t *cube, rotate_action_t action, int step, int *best_length);
 
-MPI_Datatype directType;
 
 MPI_Datatype solutionType;
 
@@ -26,19 +18,6 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
     int myId;
     int numP;
     solution->length = MAX_SOLUTION_LENGTH+1;
-    int temp;
-    //MPI_Init_thread(NULL, NULL, MPI_THREAD_MULTIPLE, &temp);
-
-
-//    int blockLengths[2] = {1, 6 * N * N};
-//    MPI_Aint lb, extent;
-//    MPI_Type_get_extent(MPI_INT, &lb, &extent);
-//    MPI_Aint disp[2] = {0, 2 * extent};
-//    MPI_Datatype types[2] = {MPI_INT, MPI_CHAR};
-//
-//    MPI_Type_create_struct(2, blockLengths, disp, types, &directType);
-//    MPI_Type_commit(& directType);
-
 
     int blockLengthsSolution[2] = {1, 6 * N * N};
     MPI_Aint lbSolution, extentSolution;
@@ -146,7 +125,7 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
 
         rotate_action_t * action_chain;
 
-        solution_t current_solution;
+        solution_p_t current_solution;
 
         MPI_Status status;
         int data_length;
@@ -164,7 +143,7 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
 
             current_solution.length = local_best_length;
             if (local_best_length < MAX_SOLUTION_LENGTH+1){
-                memcpy(&current_solution.steps, &action_chain, sizeof(rotate_action_t) * (local_best_length+1));
+                memcpy(&current_solution.steps, &action_chain, sizeof(rotate_action_t) * (local_best_length));
             }
             free(action_chain);
 
@@ -202,20 +181,24 @@ rotate_action_t* parallelSolver(cube_t *cube, rotate_action_t action, int step, 
         verifyValid(cube);
     }
     // if we find a solution
-    if (checkSolved(cube)){
+    if (step+1 >= *best_length)
+        return NULL;
+
+    else if (checkSolved(cube)) {
+
+        printf("step: %d+1, %d\n", step, *best_length);
+
+
         //print_cube(cube);
         // check if it's shorter than current best
-        if (step+1 < *best_length) {
-            *best_length = step+1;
-            rotate_action_t * solutions = calloc(step + 1, sizeof(rotate_action_t));
-            memcpy(&solutions[step], &action, sizeof(rotate_action_t));
-            return solutions;
-        } else
-            return NULL;
+        *best_length = step + 1;
+        rotate_action_t *solutions = calloc(step + 1, sizeof(rotate_action_t));
+        memcpy(&solutions[step], &action, sizeof(rotate_action_t));
+        return solutions;
+
     }
         // we recurse to far, turn back, there be dragons (unallocated memory)
-    else if (step+1 > *best_length)
-        return NULL;
+
         // If we just need to keep recursing
     else {
         rotate_action_t *best_solution = NULL;
@@ -251,12 +234,5 @@ rotate_action_t* parallelSolver(cube_t *cube, rotate_action_t action, int step, 
         return best_solution;
     }
 
-
-
-
-
-
-
 }
 
-//#pragma clang diagnostic pop
