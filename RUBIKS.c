@@ -21,15 +21,19 @@ void scramble(cube_t* cube);
 
 
 int main(int argc, char * argv[]) {
+    // Initialize MPI.
     MPI_Init(NULL, NULL);
+
+    // Variables used in main.
     int myId;
     int numP;
     cube_t *my_cube;
     solution_t parallel_solution;
     double seq_time;
+    double para_time;
 
     // Define the timer.
-    clock_t t;
+    clock_t t = 0;
 
     // Get the number of processes and the current process index.
     MPI_Comm_size(MPI_COMM_WORLD, &numP);
@@ -54,13 +58,13 @@ int main(int argc, char * argv[]) {
         print_cube(my_cube);
         printf("\n");
 
-         // Make a copy of the cube for the sequential version to work on.
-        cube_t * seq_cube = malloc(sizeof(cube_t));
+        // Make a copy of the cube for the sequential version to work on.
+        cube_t* seq_cube = malloc(sizeof(cube_t));
         memcpy(seq_cube, my_cube, sizeof(cube_t));
 
         // Call and time the sequential solution.
         t = clock();
-        solution_t * seq_solution = seqentialLauncher(my_cube);
+        solution_t * seq_solution = seqentialLauncher(seq_cube);
         t = clock() - t;
 
         // Convert the sequential time to seconds.
@@ -89,11 +93,9 @@ int main(int argc, char * argv[]) {
     MPI_Barrier(MPI_COMM_WORLD);
     if(!myId) t = clock() - t;
 
-    // Convert the sequential time to seconds.
-
     if (!myId) {
-        // Convert the sequential time to seconds.
-        double para_time = ((double)t) / CLOCKS_PER_SEC;
+        // Convert the parallel time to seconds.
+        para_time = ((double)t) / CLOCKS_PER_SEC;
 
         // Print whether it was successfully solved.
         if (parallel_solution.length <= MAX_SOLUTION_LENGTH) {
