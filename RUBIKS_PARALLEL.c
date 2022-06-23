@@ -102,9 +102,8 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
 
 
 
-
             if (temp_solution->length < best_length){
-                memcpy(&solution->steps, &temp_solution->steps, sizeof(rotate_action_t) * best_length);
+                memcpy(&solution->steps, &temp_solution->steps, sizeof(rotate_action_t) *  temp_solution->length);
                 best_length = temp_solution->length;
                 solution->length = best_length;
             }
@@ -117,9 +116,11 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
 
 
             MPI_Recv(temp_solution, 1, solutionType, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &status);
+            printf("GUARD\n %d \nGUARD\n", temp_solution->length);
+
 
             if (temp_solution->length < best_length) {
-                memcpy(solution->steps, temp_solution->steps, sizeof(rotate_action_t) * best_length);
+                memcpy(solution->steps, temp_solution->steps, sizeof(rotate_action_t) * temp_solution->length);
                 best_length = temp_solution->length;
                 solution->length = best_length;
             }
@@ -157,10 +158,13 @@ void parallelLauncher(cube_t* cube, solution_t * solution) {
         while(data_length > 0){
             action_chain = parallelSolver((cube_t *) cube_copy, next_action, 0, &local_best_length);
 
+            printf("GUARD\n %d \nGUARD\n", local_best_length);
+
+
 
             current_solution.length = local_best_length;
             if (local_best_length < MAX_SOLUTION_LENGTH){
-                memcpy(&current_solution.steps, &action_chain, sizeof(rotate_action_t) * best_length);
+                memcpy(&current_solution.steps, &action_chain, sizeof(rotate_action_t) * (best_length+1));
             }
             free(action_chain);
 
@@ -202,6 +206,7 @@ rotate_action_t* parallelSolver(cube_t *cube, rotate_action_t action, int step, 
         //print_cube(cube);
         // check if it's shorter than current best
         if (step < *best_length) {
+            *best_length = step;
             rotate_action_t * solutions = calloc(step + 1, sizeof(rotate_action_t));
             memcpy(&solutions[step], &action, sizeof(rotate_action_t));
             return solutions;
@@ -209,7 +214,7 @@ rotate_action_t* parallelSolver(cube_t *cube, rotate_action_t action, int step, 
             return NULL;
     }
         // we recurse to far, turn back, there be dragons (unallocated memory)
-    else if (step >= *best_length)
+    else if (step > *best_length)
         return NULL;
         // If we just need to keep recursing
     else {

@@ -86,7 +86,7 @@ int main(int argc, char * argv[]) {
         }
 
         // Free the original cube.
-        free(my_cube);
+        //free(my_cube);
 
         // Free the sequential copy of the cube.
         free(seq_cube);
@@ -108,8 +108,6 @@ int main(int argc, char * argv[]) {
         // Print whether it was successfully solved.
         if (para_solution.length <= MAX_SOLUTION_LENGTH) {
             printf("Parallel solver solved the cube in %d steps\n", para_solution.length);
-        } else {
-            printf("Parallel solver failed to solve the cube in %d steps\n", MAX_SOLUTION_LENGTH);
             printf("STEP\tAXIS\tINDEX\tDIRECTION\n");
             for (int i = 0; i < para_solution.length; i++) {
                 printf("%d\t", i);
@@ -117,6 +115,9 @@ int main(int argc, char * argv[]) {
                 printf("%d\t", para_solution.steps[i].index);
                 printf("%s\n", para_solution.steps[i].cc ? "cc" : "c");
             }
+        } else {
+            printf("Parallel solver failed to solve the cube in %d steps\n", MAX_SOLUTION_LENGTH);
+
         }
 
         // Print speeds and speedup.
