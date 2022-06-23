@@ -94,11 +94,13 @@ int main(int argc, char * argv[]) {
 
 
     // Free the sequential copy of the cube.
+    MPI_Barrier(MPI_COMM_WORLD);
+
     if (!myId)
         t = clock();
 
-
     parallelLauncher(my_cube, &parallel_solution);
+    MPI_Barrier(MPI_COMM_WORLD);
 
     if(!myId)
         t = clock() - t;
