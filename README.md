@@ -1,17 +1,65 @@
 # Rubiks-buster
 
-## Alex's Time
+## Description
+
+This goal of this project is to simulate and scramble an N × N × N Rubik's cube and compare the speed of both a sequential and parallel solution for finding the shortest series of rotations to solve the cube.
+
+The first step to representing a cube is to define an enumerated type of the 6 possible colors. Each the 6 faces of the cube can be represented as an N × N array of these colors. The cube itself is then the collection of these six sides. They have been indexed according to the following diagrams:
+
+![3D Cube With Indexing](diagrams/index_3D.png)
+![Flattened Cube With Indexing](diagrams/index_flat.png)
+![Cube Array Representation](diagrams/index_array.png)
+
+Next, we need to figure out how to define a rotation that acts on our cube. These can be defined by three values: the axis of rotation, the index of the plane relative to that axis, and the direction of the rotation. With these three values, we defined functions to perform these rotations on the edges of the plane and if applicable, it's exterior face.
+
+Once we have a method for representing a Rubik's cube and any actions that can change it's state, we can develop our methods to, when provided a scrambled cube, find the fewest number of rotations needed to unscramble it.
+
+The sequential solution works by...
+
+## How to run
+
+The only dependency for this project is [Open MPI](https://www.open-mpi.org/) however, to avoid any other issues, it is recommended to run it on the App State MPI machine.
+
+Steps:
+1. Clone the repository
+2. Run `make`
+3. Run `mpirun -np <processes> ./RUBIKS`
+
+## Completed Tasks
+
+1. Represent a Rubik's Cube
+2. Perform rotations on a Rubik's Cube
+3. Display a Rubik's Cube
+4. Initialize and scramble a Rubik's Cube
+5. Sequentially unscramble a Rubik's Cube
+
+## Uncompleted Tasks (Bugs)
+
+## Uncompleted Tasks (Time)
+
+1. Backtracking/loop prevention.
+2. Curses visualization.
+3. Non-square combination puzzles.
+
+## Time Log
+
+### Alex's Time
 
 | Date  | Hours | Notes                                                                                     |
 |-------|-------|-------------------------------------------------------------------------------------------|
 | 06-15 | 2:00  | Working on setting up the representation of the cube as well as the methods to rotate it. |
-| 06-16 | 1:30  | Working on the rotate functions. |
-| 06-16 | 2:00  | Working on the rotate functions. |
-| 06-16 | 1:20  | Worked on developing a display function. |
-| 06-20 | 2:30  | Updated the display and rotate functions to work with the new indexing method. |
-| Total | 8:20  |                                                                                           |
+| 06-16 | 1:30  | Working on implementing the rotate functions.                                             |
+| 06-16 | 2:00  | Working on the rotate functions.                                                          |
+| 06-16 | 1:20  | Worked on developing a naive display function.                                            |
+| 06-20 | 3:00  | Updated the display and rotate functions to work with the new indexing method.            |
+| 06-21 | 3:00  | Created a stack for storing the actions taken and whether we are backtracking.            |
+| 06-21 | 2:00  | Created diagrams and started working on presentation.                                     |
+| 06-22 | 1:00  | Working on the ReadMe                                                                     |
+| 06-22 | 1:20  | Debugged and added a timer to calculate speedup.                                          |
+| 06-22 | 1:20  | Refactored and cleaned up code and added comments to explain the code better.             |
+| Total | 18:30 |                                                                                           |
 
-## Andrew's Time
+### Andrew's Time
 
 | Date  | Hours | Notes                                                                                                                             |
 |-------|-------|-----------------------------------------------------------------------------------------------------------------------------------|
@@ -23,15 +71,11 @@
 | 06-20 | 4:00  | Implemented working recursive solution, reimplemented verifyValid again, added new solution type, added solution depth limit      |
 | Total | 23:00 |                                                                                                                                   |
 
+## Contributors
 
-Edit this README file so that it contains the following:
+- [Alex Clarke](https://github.com/alexpclarke)
+- [Andrew Pobrica](https://github.com/crispyman)
 
--an indication of how much time you spent on the project (you should keep track of this as you go)
--a description of what the project does
--an explanation of how to compile and run the program (and what machine to run it on).  
-If your instructor doesn't have access to the machine then you should put screenshots of runs of
-your code in the respository.
--a list of what was completed
--a list of what didn't get completed because of bugs in the code
--a list of what didn't get completed due to lack of time (ideas for future work)
--a link to the presentation that you gave to the class (or put the actual presentation in the repository)
+## License
+
+[MIT](https://github.com/alexpclarke/Haskell-Turing-Machine/blob/master/LICENSE)
