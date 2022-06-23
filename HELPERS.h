@@ -10,8 +10,8 @@
     #define SIDES 6
     #define N 3
     #define DEBUG 0
-    #define N_SCRAMBLES 200
-    #define MAX_SOLUTION_LENGTH 5
+    #define N_SCRAMBLES 7
+    #define MAX_SOLUTION_LENGTH 20
     #define MAX_STACK_SIZE 20
 
     /* ----- Type Definitions ----- */
