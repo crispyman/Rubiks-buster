@@ -30,6 +30,7 @@ int main(int argc, char * argv[]) {
     int numP;
     cube_t *my_cube;
     solution_p_t para_solution;
+
     double seq_time = 0;
     double para_time = 0;
 

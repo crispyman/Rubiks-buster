@@ -14,7 +14,7 @@ MPI_Datatype solutionType;
 
 
 
-void parallelLauncher(cube_t* cube, solution_p_t * solution) {
+void parallelLauncher(const cube_t* const cube, solution_p_t * const solution) {
     int myId;
     int numP;
     solution->length = MAX_SOLUTION_LENGTH+1;
@@ -28,10 +28,10 @@ void parallelLauncher(cube_t* cube, solution_p_t * solution) {
     MPI_Datatype typesSolution[2] = {MPI_INT, MPI_CHAR};
 
     MPI_Type_create_struct(2, blockLengthsSolution, dispSolution, typesSolution, &solutionType);
-    MPI_Type_commit(& solutionType);
+    MPI_Type_commit(&solutionType);
 
 
-    solution_t * best_solution = malloc(sizeof(solution_t) * MAX_SOLUTION_LENGTH);
+    //solution_t * best_solution = malloc(sizeof(solution_t) * MAX_SOLUTION_LENGTH);
     int best_length = MAX_SOLUTION_LENGTH+1;
 
     MPI_Comm_size(MPI_COMM_WORLD, &numP);
@@ -70,7 +70,7 @@ void parallelLauncher(cube_t* cube, solution_p_t * solution) {
 
         // reads data and sends remaining jobs out
         for (; next < num_actions; next++){
-            solution_p_t temp_solution;// = calloc(MAX_SOLUTION_LENGTH, sizeof(solution_t));
+            solution_p_t temp_solution;
 
             MPI_Status status;
 
@@ -81,7 +81,7 @@ void parallelLauncher(cube_t* cube, solution_p_t * solution) {
 
 
             if (temp_solution.length < best_length && temp_solution.length > 0){
-                memcpy(&solution->steps, &temp_solution.steps, sizeof(rotate_action_t) *  temp_solution.length);
+                memcpy(&solution->steps, temp_solution.steps, sizeof(rotate_action_t) *  temp_solution.length);
                 best_length = temp_solution.length;
                 solution->length = best_length;
             }
@@ -92,6 +92,7 @@ void parallelLauncher(cube_t* cube, solution_p_t * solution) {
         for (int i = 1; i < numP; i++) {
             solution_p_t temp_solution;
             temp_solution.length = MAX_SOLUTION_LENGTH+1;
+
             MPI_Status status;
 
 
@@ -100,7 +101,7 @@ void parallelLauncher(cube_t* cube, solution_p_t * solution) {
 
 
             if (temp_solution.length < best_length && temp_solution.length > 0){
-                memcpy(&solution->steps, &temp_solution.steps, sizeof(rotate_action_t) *  temp_solution.length);
+                memcpy(&solution->steps, temp_solution.steps, sizeof(rotate_action_t) *  temp_solution.length);
                 best_length = temp_solution.length;
                 solution->length = best_length;
             }
@@ -126,6 +127,7 @@ void parallelLauncher(cube_t* cube, solution_p_t * solution) {
         rotate_action_t * action_chain;
 
         solution_p_t current_solution;
+        current_solution.length = MAX_SOLUTION_LENGTH+1;
 
         MPI_Status status;
         int data_length;
