@@ -71,7 +71,8 @@ The Parallel version sometimes finds a slightly longer/different solution than t
 | 06-22 | 1:20  | Refactored and cleaned up code and added comments to explain the code better.             |
 | 06-23 | 1:35  | Cleaned up the main and worked on readme/slides                                           |
 | 06-23 | 1:15  | Debugging problem with parallel solution and finalizing readme/slides                     |
-| Total | 21:20 |                                                                                           |
+| 06-23 | 2:00  | Trying to debug issues with parallel solution                                             |
+| Total | 23:20 |                                                                                           |
 
 ### Andrew's Time
 
