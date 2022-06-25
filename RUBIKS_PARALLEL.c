@@ -114,7 +114,7 @@ void parallelLauncher(const cube_t* const cube, solution_p_t * const solution) {
     }
     // child process work
     else{
-        int local_best_length = MAX_SOLUTION_LENGTH + 1;
+        int local_best_length = best_length;
         cube_t cube_local;
         // get start cube
         MPI_Recv(&cube_local, SIDES * N * N, MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
@@ -141,12 +141,10 @@ void parallelLauncher(const cube_t* const cube, solution_p_t * const solution) {
 
             //printf("GUARD\n %d \nGUARD\n", local_best_length);
 
-
-
-
             // if new solution better than local best replace local best
-            if (local_best_length < MAX_SOLUTION_LENGTH+1){
+            if (local_best_length < best_length && action_chain != NULL){
                 current_solution.length = local_best_length;
+                best_length = local_best_length;
                 memcpy(&current_solution.steps, &action_chain, sizeof(rotate_action_t) * (local_best_length));
             }
             free(action_chain);
@@ -192,10 +190,6 @@ rotate_action_t* parallelSolver(cube_t *cube, rotate_action_t action, int step, 
 
     else if (checkSolved(cube)) {
 
-        //printf("step: %d+1, %d\n", step, *best_length);
-
-
-        //print_cube(cube);
         // check if it's shorter than current best
         *best_length = step + 1;
         rotate_action_t *solutions = calloc(step + 1, sizeof(rotate_action_t));
@@ -210,7 +204,6 @@ rotate_action_t* parallelSolver(cube_t *cube, rotate_action_t action, int step, 
         rotate_action_t *best_solution = NULL;
 
         // permute over all the states that lead away from here
-        // TODO: don't go back to our last state and preferably any previous state
         for (int i = 0; i < N; i++){
             for (int j = 0; j < 3; j++){
                 for (int k = 0; k < 2; k++) {
@@ -231,7 +224,6 @@ rotate_action_t* parallelSolver(cube_t *cube, rotate_action_t action, int step, 
                         best_solution = temp_solution;
                     }
                     // get rid of the cube copy we made since the function using it returned;
-                    //free(cube_copy);
                 }
             }
         }
