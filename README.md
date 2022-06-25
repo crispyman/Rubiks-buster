@@ -41,6 +41,7 @@ Steps:
 6. Unscramble a Rubik's Cube using MPI
 
 ## Uncompleted Tasks (Bugs)
+The Parallel version sometimes finds a slightly longer/different solution than the sequential version
 
 ## Uncompleted Tasks (Time)
 
@@ -84,8 +85,10 @@ Steps:
 | 06-20 | 4:00  | Implemented working recursive solution, reimplemented verifyValid again, added new solution type, added solution depth limit       |
 | 06-21 | 4:00  | Started on parallel solution, rewrote parts of sequential version to use an array instead of recursively returning malloced memory |
 | 06-22 | 8:00  | Finished implementing Parallel solution with, fixed so many bugs                                                                   |
-| 06-23 | 5:00  | Spent all my time debugging parrallel and fixing timing                                                                            |
-| Total | 35:00 |                                                                                                                                    |
+| 06-23 | 5:00  | Spent all my time debugging parallel and fixing timing                                                                             |
+| 06-24 | 4:00  | Tried to find out why parallel give slightly longer solution                                                                       |
+| 06-25 | 0:30  | Updated README, some code cleanup                                                                                                  |
+| Total | 44:30 |                                                                                                                                    |
 
 ## Contributors
 

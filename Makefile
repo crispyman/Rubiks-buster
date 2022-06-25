@@ -1,5 +1,5 @@
 MPICC = mpicc
-MPICCFLAGS = -std=gnu11 -O0 -g -c -Wall -Wno-unused-variable -Wno-unused
+MPICCFLAGS = -std=gnu11 -O2 -c -Wall -Wno-unused-variable -Wno-unused
 .c.o:
 	$(MPICC) $(MPICCFLAGS) $< -o $@
 
